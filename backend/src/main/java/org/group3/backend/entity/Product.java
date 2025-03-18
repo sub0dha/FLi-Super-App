@@ -17,13 +17,7 @@ public class Product {
     private String name;
     private String description;
     private double price;
+    private String category;
+    private String stock_quantity;
 
-    public Product() {
-    }
-
-    public Product(String name, String description, double price) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
 }
