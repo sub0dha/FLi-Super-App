@@ -1,13 +1,13 @@
 package org.group3.backend.controller;
 
-
 import org.group3.backend.model.Product;
 import org.group3.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ProductController {
 
