@@ -1,11 +1,12 @@
-import React from 'react';
-import ProductForm from './ProductForm';
+import ViewProducts from "./components/ViewProducts.js";
+import ProductForm from "./components/ProductForm.js";
 
 function App() {
   return (
-      <div className="App">
+    <div>
+      <ViewProducts />
         <ProductForm />
-      </div>
+    </div>
   );
 }
 
