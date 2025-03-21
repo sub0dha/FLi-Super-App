@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ProductForm.css'; // Import the CSS
 
-function ProductForm() {
+function ProductForm({ onClose }) {
     const [product, setProduct] = useState({
         name: '',
         description: '',
@@ -29,6 +29,9 @@ function ProductForm() {
                 console.log('Product added successfully!');
                 // Clear the form or redirect
                 setProduct({ name: '', description: '', price: '', category: '', stock_quantity: '' });
+                if (onClose) { // Call onClose if it's provided
+                    onClose();
+                }
             } else {
                 console.error('Failed to add product');
             }
@@ -92,6 +95,12 @@ function ProductForm() {
                 </label>
                 <br/>
                 <button type="submit">Add Product</button>
+                <br/> {/* Add a line break to push the Cancel button down */}
+                {onClose && ( // Conditionally render the cancel button if onClose is provided
+                    <button type="button" onClick={onClose} className="cancel-button">
+                        Cancel
+                    </button>
+                )}
             </form>
         </div>
     );

@@ -39,3 +39,14 @@
 .product-form button:hover {
     background-color: #0056b3;
 }
+
+.product-form .cancel-button {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    /* You can add more styles here if needed, like margin-top */
+    margin-top: 10px; /* Add some space above the Cancel button */
+}
+
+.product-form .cancel-button:hover {
+    background-color: #c82333;
+}

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './ViewProducts.css';
+import ProductForm from './ProductForm';
 
 const ViewProducts = () => {
     const [products, setProducts] = useState([]);
+    const [showAddForm, setShowAddForm] = useState(false);
 
     // Fetch products from the backend
     useEffect(() => {
@@ -43,8 +45,13 @@ const ViewProducts = () => {
 
     // add product
     const handleAddProduct = () => {
-        alert('Redirect to add product page');
+        // alert('Redirect to add product page');
+        setShowAddForm(!showAddForm);
         // You can implement a modal or redirect logic here
+    };
+
+    const handleCloseForm = () => {
+        setShowAddForm(false);
     };
 
     return (
@@ -58,6 +65,8 @@ const ViewProducts = () => {
                     Add Product
                 </button>
             </div>
+
+            {showAddForm && <ProductForm onClose={handleCloseForm} />} {/* Conditionally render the ProductForm */}
             <table>
                 <thead>
                 <tr>
