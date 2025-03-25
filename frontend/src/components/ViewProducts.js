@@ -20,7 +20,7 @@ const ViewProducts = () => {
 
     // delete product
     const handleDelete = (id) => {
-        fetch(`http://localhost:8080/product/${id}`, {
+        fetch(`http://localhost:8080/products/${id}`, {
             method: 'DELETE',
         })
             .then(response => {
