@@ -8,7 +8,7 @@ const ViewProducts = () => {
 
     // Fetch products from the backend
     useEffect(() => {
-        fetch('http://localhost:8080/products')
+        fetch('http://localhost:8081/products')
             .then(response => response.json())
             .then(data => {
                 setProducts(data);
@@ -20,7 +20,7 @@ const ViewProducts = () => {
 
     // delete product
     const handleDelete = (id) => {
-        fetch(`http://localhost:8080/product/${id}`, {
+        fetch(`http://localhost:8081/product/${id}`, {
             method: 'DELETE',
         })
             .then(response => {
