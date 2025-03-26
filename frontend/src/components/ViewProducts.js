@@ -24,6 +24,9 @@ const ViewProducts = () => {
         fetch(`http://localhost:8080/products/${id}`, {
 =======
         fetch(`http://localhost:8081/product/${id}`, {
+<<<<<<< HEAD
+>>>>>>> parent of 7aa58a1 (Merge branch 'nav' into dj1)
+=======
 >>>>>>> parent of 7aa58a1 (Merge branch 'nav' into dj1)
             method: 'DELETE',
         })
