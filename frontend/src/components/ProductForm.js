@@ -17,7 +17,7 @@ function ProductForm({ onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8081/products/add', {
+            const response = await fetch('http://localhost:8080/products/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
