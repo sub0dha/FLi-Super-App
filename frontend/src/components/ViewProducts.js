@@ -21,20 +21,46 @@ const ViewProducts = () => {
     // delete product
     const handleDelete = (id) => {
         fetch(`http://localhost:8081/product/${id}`, {
-            method: 'DELETE',
+          method: 'DELETE',
         })
             .then(response => {
                 if (response.ok) {
                     // Remove the deleted product from the state
                     setProducts(products.filter(product => product.id !== id));
-                    alert('Product deleted successfully!');
+                    // Custom notification instead of alert
+                    showNotification(`Product with (ID: ${id}) deleted successfully!`);
                 } else {
-                    alert('Failed to delete product.');
+                    showNotification('Failed to delete product.');
                 }
             })
             .catch(error => {
                 console.error('There was an error deleting the product!', error);
+                showNotification('Error occurred while deleting product.');
             });
+    };
+
+// Add this function to create custom notifications
+    const showNotification = (message) => {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'custom-notification';
+        notification.textContent = message;
+
+        // Add to DOM
+        document.body.appendChild(notification);
+
+        // Show notification
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
     };
 
     // edit product
