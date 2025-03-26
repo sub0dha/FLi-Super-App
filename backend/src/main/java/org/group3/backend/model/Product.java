@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 
-@Entity(name="ModelProduct")
+@Entity(name = "ModelProduct")
 public class Product {
 
     @Id
