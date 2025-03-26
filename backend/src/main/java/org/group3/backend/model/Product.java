@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 
-@Entity
+@Entity(name="ModelProduct")
 public class Product {
 
     @Id
@@ -21,7 +21,7 @@ public class Product {
     public Product() {
     }
 
-    public long getId() {
+    public double getId() {
         return id;
     }
 

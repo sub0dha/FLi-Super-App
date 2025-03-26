@@ -20,47 +20,25 @@ const ViewProducts = () => {
 
     // delete product
     const handleDelete = (id) => {
+<<<<<<< HEAD
         fetch(`http://localhost:8080/products/${id}`, {
+=======
+        fetch(`http://localhost:8081/product/${id}`, {
+>>>>>>> parent of 7aa58a1 (Merge branch 'nav' into dj1)
             method: 'DELETE',
         })
             .then(response => {
                 if (response.ok) {
                     // Remove the deleted product from the state
                     setProducts(products.filter(product => product.id !== id));
-                    // Custom notification instead of alert
-                    showNotification(`Product with (ID: ${id}) deleted successfully!`);
+                    alert('Product deleted successfully!');
                 } else {
-                    showNotification('Failed to delete product.');
+                    alert('Failed to delete product.');
                 }
             })
             .catch(error => {
                 console.error('There was an error deleting the product!', error);
-                showNotification('Error occurred while deleting product.');
             });
-    };
-
-// Add this function to create custom notifications
-    const showNotification = (message) => {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = 'custom-notification';
-        notification.textContent = message;
-
-        // Add to DOM
-        document.body.appendChild(notification);
-
-        // Show notification
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
-
-        // Remove after delay
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 3000);
     };
 
     // edit product
