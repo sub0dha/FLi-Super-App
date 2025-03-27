@@ -11,8 +11,11 @@ import java.util.List;
 @RestController
 public class ProductController {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
+    public ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @PostMapping("/products/add")
     Product addProduct(@RequestBody Product product) {
