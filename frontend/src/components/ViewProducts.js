@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './ViewProducts.css';
 import ProductForm from './ProductForm';
+import ProductUpdateForm from "./ProductUpdateForm";
 
 const ViewProducts = () => {
     const [products, setProducts] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [showProductUpdateForm, setShowProductUpdateForm] = useState(false);
 
     // Fetch products from the backend
     useEffect(() => {
@@ -20,7 +22,7 @@ const ViewProducts = () => {
 
     // delete product
     const handleDelete = (id) => {
-        fetch(`http://localhost:8080/product/${id}`, {
+        fetch(`http://localhost:8080/products/${id}`, {
             method: 'DELETE',
         })
             .then(response => {
@@ -39,8 +41,13 @@ const ViewProducts = () => {
 
     // edit product
     const handleEdit = (id) => {
-        alert(`Edit product with ID: ${id}`);
+        // alert(`Edit product with ID: ${id}`);
+        setShowProductUpdateForm(!showProductUpdateForm);
         // You can implement a modal or redirect logic here
+    };
+
+    const handleCloseUpdateForm = () => {
+        setShowProductUpdateForm(false);
     };
 
     // add product
@@ -92,9 +99,11 @@ const ViewProducts = () => {
                             <button
                                 className="action-button edit"
                                 onClick={() => handleEdit(product.id)}
+
                             >
-                                Edit
+                                    Edit
                             </button>
+                            {showProductUpdateForm && <ProductUpdateForm onClose={handleCloseUpdateForm} />}
                             <button
                                 className="action-button delete"
                                 onClick={() => handleDelete(product.id)}

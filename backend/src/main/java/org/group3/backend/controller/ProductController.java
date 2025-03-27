@@ -46,7 +46,7 @@ public class ProductController {
 
     @DeleteMapping("/products/{id}")
     String deleteProduct(@PathVariable Long id) {
-        if(!productRepository.existsById(id)) {
+        if (!productRepository.existsById(id)) {
             return "Product not found with id " + id;
         }
         productRepository.deleteById(id);

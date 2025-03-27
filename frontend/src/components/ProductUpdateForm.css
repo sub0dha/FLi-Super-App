@@ -1,0 +1,68 @@
+.product-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .product-form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .product-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .product-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .product-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .product-form .cancel-button {
+    background-color: #dc3545;
+    color: white;
+    margin-top: 10px;
+  }
+  
+  .product-form .cancel-button:hover {
+    background-color: #c82333;
+  }
+  
+  .product-form-loading,
+  .product-form-error {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .product-form-error {
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  
