@@ -1,14 +1,15 @@
 package org.group3.backend.controller;
 
-
 import org.group3.backend.model.Product;
 import org.group3.backend.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductRepository productRepository;
@@ -17,17 +18,34 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @PostMapping("/products/add")
+    @GetMapping
+    public List<Product> getProducts(@RequestParam(value = "search", required = false) String search) {
+        if (search != null && !search.trim().isEmpty()) {
+            // Use the custom repository method to search products
+            return productRepository.findByNameContainingIgnoreCase(search);
+        }
+        // Return all products if no search query is provided or if it's empty
+        return productRepository.findAll();
+    }
+
+    @PostMapping("/add")
     Product addProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
 
-    @GetMapping("/products")
-    List<Product> getAllProducts() {
-        return productRepository.findAll();
+    // @GetMapping("/")
+    // List<Product> getAllProducts() {
+    //     return productRepository.findAll();
+    // }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+        return productRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    @PutMapping("/products/{id}")
+    @PutMapping("/{id}")
     Product updateProduct(@RequestBody Product product, @PathVariable Long id) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
@@ -44,7 +62,7 @@ public class ProductController {
 
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     String deleteProduct(@PathVariable Long id) {
         if (!productRepository.existsById(id)) {
             return "Product not found with id " + id;
