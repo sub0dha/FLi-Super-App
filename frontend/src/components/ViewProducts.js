@@ -1,122 +1,150 @@
-import React, { useEffect, useState } from 'react';
-import './ViewProducts.css';
-import ProductForm from './ProductForm';
+import React, { useEffect, useState } from "react";
+import "./ViewProducts.css";
+import ProductForm from "./ProductForm";
 import ProductUpdateForm from "./ProductUpdateForm";
 
 const ViewProducts = () => {
-    const [products, setProducts] = useState([]);
-    const [showAddForm, setShowAddForm] = useState(false);
-    const [showProductUpdateForm, setShowProductUpdateForm] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editingProductId, setEditingProductId] = useState(null);
 
-    // Fetch products from the backend
-    useEffect(() => {
-        fetch('http://localhost:8080/products')
-            .then(response => response.json())
-            .then(data => {
-                setProducts(data);
-            })
-            .catch(error => {
-                console.error('There was an error fetching the products!', error);
-            });
-    }, []);
+  // Fetch products from the backend
+  useEffect(() => {
+    const query = searchQuery || ""; // Fallback to an empty string if searchQuery is undefined
+    fetch(`http://localhost:8080/products?search=${query}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
+  }, [searchQuery]); // Re-fetch products whenever the search query changes
 
-    // delete product
-    const handleDelete = (id) => {
-        fetch(`http://localhost:8080/products/${id}`, {
-            method: 'DELETE',
-        })
-            .then(response => {
-                if (response.ok) {
-                    // Remove the deleted product from the state
-                    setProducts(products.filter(product => product.id !== id));
-                    alert('Product deleted successfully!');
-                } else {
-                    alert('Failed to delete product.');
-                }
-            })
-            .catch(error => {
-                console.error('There was an error deleting the product!', error);
-            });
-    };
+  const handleProductAdded = (newProduct) => {
+    setProducts([...products, newProduct]);
+    setShowAddForm(false);
+  };
 
-    // edit product
-    const handleEdit = (id) => {
-        // alert(`Edit product with ID: ${id}`);
-        setShowProductUpdateForm(!showProductUpdateForm);
-        // You can implement a modal or redirect logic here
-    };
+  const handleDelete = (id) => {
+    fetch(`http://localhost:8080/products/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          setProducts(products.filter((product) => product.id !== id));
+          alert("Product deleted successfully!");
+        } else {
+          alert("Failed to delete product.");
+        }
+      })
+      .catch((error) => {
+        console.error("There was an error deleting the product!", error);
+      });
+  };
 
-    const handleCloseUpdateForm = () => {
-        setShowProductUpdateForm(false);
-    };
+  const handleEdit = (id) => {
+    setEditingProductId(id);
+  };
 
-    // add product
-    const handleAddProduct = () => {
-        // alert('Redirect to add product page');
-        setShowAddForm(!showAddForm);
-        // You can implement a modal or redirect logic here
-    };
+  const handleCloseUpdateForm = () => {
+    setEditingProductId(null);
+  };
 
-    const handleCloseForm = () => {
-        setShowAddForm(false);
-    };
+  // Filter products based on the search query
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    return (
-        <div>
-            <h1>Available Products</h1>
-            <div className="top-bar">
-                <div className="search-bar">
-                    <input type="text" placeholder="Search..." />
-                </div>
-                <button className="add-product-button" onClick={handleAddProduct}>
-                    Add Product
-                </button>
-            </div>
-
-            {showAddForm && <ProductForm onClose={handleCloseForm} />} {/* Conditionally render the ProductForm */}
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Stock Quantity</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {products.map(product => (
-                    <tr key={product.id}>
-                        <td>{product.id}</td>
-                        <td>{product.name}</td>
-                        <td>{product.price}</td>
-                        <td>{product.category}</td>
-                        <td>{product.description}</td>
-                        <td>{product.stock_quantity}</td>
-                        <td>
-                            <button
-                                className="action-button edit"
-                                onClick={() => handleEdit(product.id)}
-
-                            >
-                                    Edit
-                            </button>
-                            {showProductUpdateForm && <ProductUpdateForm onClose={handleCloseUpdateForm} />}
-                            <button
-                                className="action-button delete"
-                                onClick={() => handleDelete(product.id)}
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+  return (
+    <div>
+      <h1>Available Products</h1>
+      <div className="top-bar">
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery} // Bind search query state
+            onChange={(e) => setSearchQuery(e.target.value)} // Update search query state
+          />
         </div>
-    );
+        <button
+          className="add-product-button"
+          onClick={() => setShowAddForm(!showAddForm)}
+        >
+          Add Product
+        </button>
+      </div>
+
+      {showAddForm && (
+        <ProductForm
+          onClose={() => setShowAddForm(false)}
+          onProductAdded={handleProductAdded}
+        />
+      )}
+
+      {editingProductId && (
+        <ProductUpdateForm
+          productId={editingProductId}
+          onClose={handleCloseUpdateForm}
+          onUpdate={(updatedProduct) => {
+            setProducts(
+              products.map((p) =>
+                p.id === updatedProduct.id ? updatedProduct : p
+              )
+            );
+            handleCloseUpdateForm();
+          }}
+        />
+      )}
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Stock Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredProducts.map((product) => (
+            <tr key={product.id}>
+              <td>{product.id}</td>
+              <td>{product.name}</td>
+              <td>{product.price}</td>
+              <td>{product.category}</td>
+              <td>{product.description}</td>
+              <td>{product.stock_quantity}</td>
+              <td>
+                <button
+                  className="action-button edit"
+                  onClick={() => handleEdit(product.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="action-button delete"
+                  onClick={() => handleDelete(product.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default ViewProducts;
