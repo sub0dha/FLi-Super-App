@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; 
+import Logo from '../assets/Logo.png';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -54,15 +56,17 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
       <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
+      <img src={Logo} alt="Logo" className="logo" />
+      <h2 className="login-title" >Welcome back to Fli Super</h2>
+      <h3 className="login-subtitle">Login to your account</h3>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          autoComplete="new-email" // Prevent autofill
+          autoComplete="new-email" 
         />
         <input
           type="password"
@@ -70,7 +74,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="new-password" // Prevent autofill
+          autoComplete="new-password" 
         />
         <button type="submit">Login</button>
         {error && <p className="error-message">{error}</p>}

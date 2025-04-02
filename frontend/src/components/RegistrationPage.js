@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './RegistrationPage.css';
+import Logo from '../assets/Logo.png';
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
@@ -54,8 +55,11 @@ function RegistrationPage() {
   };
 
   return (
-    <div className="registration-container">
+    
+    <div className="registration-container">  
       <div className="registration-form">
+        <img src={Logo} alt="Logo" className="logo" />
+        <h2 className="welcome-message" >Welcome to Fli Super</h2>
         <h2 className="registration-title">Register</h2>
         <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">

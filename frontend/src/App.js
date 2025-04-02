@@ -6,7 +6,7 @@ import UserDashboard from './components/UserDashboard.js';
 import AdminDashboard from './components/AdminDashboard.js';
 
 const App = () => {
-  const userRole = localStorage.getItem('userRole'); // Retrieve role from localStorage
+  const userRole = localStorage.getItem('userRole');
 
   return (
     <Router>
