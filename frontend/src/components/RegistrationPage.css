@@ -1,0 +1,134 @@
+.registration-container {
+  background: url(../assets/Backgroung-img.png) no-repeat center center;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.welcome-message {
+  color: rgb(15, 15, 15);
+  font-size: 20px;
+  margin-top: -100px;
+  margin-bottom: -8px;
+  text-align: center;
+  width: 100%;
+}
+
+.welcome-text {
+  color: #000000;
+  text-align: center;
+  margin-bottom: 10px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.registration-form {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.registration-title {
+  color: #2E7D32;
+  text-align: center;
+  margin-bottom: 16px;
+  width: 100%;
+  font-size: 19px;
+}
+
+.form-group {
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  color: #2E7D32;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px;
+  border: 1.5px solid #81C784;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2E7D32;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  height: 38px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #388E3C;
+  transform: scale(1.03);
+}
+
+.redirect-login {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.redirect-login a {
+  color: #388E3C;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.redirect-login a:hover {
+  text-decoration: underline;
+  color: #2E7D32;
+}
+
+@media (max-width: 480px) {
+  .registration-form {
+    padding: 20px;
+    max-width: 90%;
+  }
+  
+  .welcome-message {
+    font-size: 20px;
+    margin-top: -80px;
+  }
+  
+  .welcome-text {
+    font-size: 16px;
+  }
+  
+  .logo {
+    max-width: 250px;
+  }
+}
