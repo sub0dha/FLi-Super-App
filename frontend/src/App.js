@@ -1,11 +1,19 @@
 import React from "react";
-import ViewProducts from "./components/ViewProducts.js";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ViewProducts from "./components/ViewProducts";
+import HomePage from "./components/HomePage";
+import "./App.css"
+import ProductsPage from "./components/ProductsPage";
 
 function App() {
   return (
-    <div>
-      <ViewProducts />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/products" element={<ViewProducts />} />
+        <Route path="/productPage" element={<ProductsPage />} />
+      </Routes>
+    </Router>
   );
 }
 
