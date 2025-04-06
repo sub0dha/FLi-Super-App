@@ -19,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public List<Product> getProducts(@RequestParam(value = "query", required = false) String query) {
+    public List<Product> getProducts(@RequestParam(value = "q", required = false) String query) {
         if (query != null && !query.trim().isEmpty()) {
             // Use the custom repository method to search products
             return productRepository.findByNameContainingIgnoreCase(query);
