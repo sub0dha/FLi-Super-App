@@ -11,22 +11,46 @@ const ViewProducts = () => {
 
   // Fetch products from the backend
   useEffect(() => {
-    const query = searchQuery || ""; // Fallback to an empty string if searchQuery is undefined
-    fetch(`http://localhost:8080/products?search=${query}`)
+    fetchProducts();
+  }, []); // Empty dependency array means this runs only once on mount
+
+  // Function to fetch all products
+  const fetchProducts = () => {
+    fetch(`http://localhost:8080/products`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
+        if (!response.ok) throw new Error("Failed to fetch products");
         return response.json();
       })
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the products!", error);
-      });
-  }, [searchQuery]); // Re-fetch products whenever the search query changes
+      .then(setProducts)
+      .catch(console.error);
+  };
 
+  // Function to handle search
+  const handleSearch = (query) => {
+    if (query.trim() === "") {
+      fetchProducts(); // If search is empty, fetch all products
+      return;
+    }
+
+    fetch(`http://localhost:8080/products/search?q=${query}`)
+      .then((response) => {
+        if (!response.ok) throw new Error("Search failed");
+        return response.json();
+      })
+      .then(setProducts)
+      .catch(console.error);
+  };
+
+  // Debounced search handler
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch(searchQuery);
+    }, 300); // 300ms debounce delay
+
+    return () => clearTimeout(timer); // Cleanup on unmount or searchQuery change
+  }, [searchQuery]);
+
+  // ... rest of your component remains the same ...
   const handleProductAdded = (newProduct) => {
     setProducts([...products, newProduct]);
     setShowAddForm(false);

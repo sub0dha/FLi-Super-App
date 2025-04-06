@@ -35,7 +35,7 @@ To run this project locally, follow these steps:
     npm install
     ```
 
-4. **Start the Application**:
+3. **Start the Application**:
     ```bash
     npm start
     ```

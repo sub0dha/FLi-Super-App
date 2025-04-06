@@ -18,11 +18,11 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @GetMapping
-    public List<Product> getProducts(@RequestParam(value = "search", required = false) String search) {
-        if (search != null && !search.trim().isEmpty()) {
+    @GetMapping("/search")
+    public List<Product> getProducts(@RequestParam(value = "query", required = false) String query) {
+        if (query != null && !query.trim().isEmpty()) {
             // Use the custom repository method to search products
-            return productRepository.findByNameContainingIgnoreCase(search);
+            return productRepository.findByNameContainingIgnoreCase(query);
         }
         // Return all products if no search query is provided or if it's empty
         return productRepository.findAll();
@@ -33,10 +33,10 @@ public class ProductController {
         return productRepository.save(product);
     }
 
-    // @GetMapping("/")
-    // List<Product> getAllProducts() {
-    //     return productRepository.findAll();
-    // }
+     @GetMapping
+     List<Product> getAllProducts() {
+         return productRepository.findAll();
+     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
