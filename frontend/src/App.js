@@ -7,6 +7,7 @@ import AdminDashboard from './components/AdminDashboard.js';
 import HomePage from './components/HomePage.js';
 import ViewProducts from './components/ViewProducts.js';
 import ProductsPage from './components/ProductsPage.js';
+import UserProfile from './components/UserProfile.js';
 
 const App = () => {
   const userRole = localStorage.getItem('userRole');
@@ -32,6 +33,10 @@ const App = () => {
         {/* Routes for viewing and managing products */}
         <Route path="/products" element={<ViewProducts />} />
         <Route path="/productPage" element={<ProductsPage />} />
+
+
+        <Route path="/user/profile" element={<UserProfile />} />
+
       </Routes>
     </Router>
   );
