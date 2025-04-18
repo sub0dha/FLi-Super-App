@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
 import Login from './components/Login.js';
-import UserDashboard from './components/UserDashboard.js';
 import AdminDashboard from './components/AdminDashboard.js';
 import HomePage from './components/HomePage.js';
 import ViewProducts from './components/ViewProducts.js';
@@ -16,14 +15,14 @@ const App = () => {
     <Router>
       <Routes>
         {/* Routes for user registration and login */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<RegistrationPage />} />
+        {/* <Route path="/" element={<HomePage />} /> */}
+        <Route path="/" element={<RegistrationPage />} />
         <Route path="/login" element={<Login />} />
         
         {/* User Role Based Dashboard */}
         <Route
-          path="/dashboard/user"
-          element={userRole === 'USER' ? <UserDashboard /> : <Navigate to="/login" />}
+          path="/HomePage"
+          element={userRole === 'USER' ? <HomePage /> : <Navigate to="/login" />}
         />
         <Route
           path="/dashboard/admin"
@@ -35,7 +34,7 @@ const App = () => {
         <Route path="/productPage" element={<ProductsPage />} />
 
 
-        <Route path="/user/profile" element={<UserProfile />} />
+        <Route path="/profile" element={<UserProfile />} />
 
       </Routes>
     </Router>

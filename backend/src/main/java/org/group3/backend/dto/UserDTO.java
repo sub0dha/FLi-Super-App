@@ -7,13 +7,17 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
     private String firstName;
-    private String lastname;
+    private String lastName;
     private String email;
+    private String address;
+    private String phoneNumber;
 
-    public UserDTO(String firstname, String lastname, String email) {
+    public UserDTO(String firstname, String lastname, String email, String address, String phoneNumber) {
         this.firstName = firstname;
-        this.lastname = lastname;
+        this.lastName = lastname;
         this.email = email;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 
 }

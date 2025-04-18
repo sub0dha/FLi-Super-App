@@ -37,12 +37,12 @@ const Login = () => {
       if (data.role) {
         console.log(`Login Success! Redirecting to ${data.role} dashboard...`);
         localStorage.setItem('jwtToken', data.token);
-
+        
         setSuccess(true);
         setError('');
 
         setTimeout(() => {
-          navigate(data.role === 'USER' ? '/dashboard/user' : '/dashboard/admin');
+          navigate(data.role === 'USER' ? '/HomePage' : '/dashboard/admin');
         }, 1500);
       } else {
         throw new Error('Role is missing from response');
