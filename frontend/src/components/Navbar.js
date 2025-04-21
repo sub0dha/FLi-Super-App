@@ -15,7 +15,7 @@ function Navbar() {
       <div className="container">
         <div className="navbar-content">
           {/* Logo */}
-          <a href="/" className="logo">
+          <a href="/home" className="logo">
             <span className="logo-fli">FLI</span>
             <span className="logo-super">SUPER</span>
           </a>
@@ -23,8 +23,8 @@ function Navbar() {
           {/* Desktop Navigation */}
           <nav className="nav-desktop">
             <ul className="nav-links">
-              <li><a href="/" className="nav-link">Home</a></li>
-              <li><a href="/products" className="nav-link">Products</a></li>
+              <li><a href="/home" className="nav-link">Home</a></li>
+              <li><a href="/ProductPage" className="nav-link">Products</a></li>
               <li><a href="/categories" className="nav-link">Categories</a></li>
               <li><a href="/offers" className="nav-link">Special Offers</a></li>
               <li><a href="/about" className="nav-link">About Us</a></li>
@@ -89,7 +89,7 @@ function Navbar() {
         {isMenuOpen && (
           <div className="nav-mobile">
             <ul className="mobile-links">
-              <li><a href="/" className="mobile-link" onClick={toggleMenu}>Home</a></li>
+              <li><a href="/home" className="mobile-link" onClick={toggleMenu}>Home</a></li>
               <li><a href="/products" className="mobile-link" onClick={toggleMenu}>Products</a></li>
               <li><a href="/categories" className="mobile-link" onClick={toggleMenu}>Categories</a></li>
               <li><a href="/offers" className="mobile-link" onClick={toggleMenu}>Special Offers</a></li>

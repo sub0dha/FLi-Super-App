@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Login.css'; 
 import Logo from '../assets/Logo.png';
 
@@ -9,7 +8,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const navigate = useNavigate();
 
   // Clear fields when component loads
   useEffect(() => {
@@ -37,12 +35,18 @@ const Login = () => {
       if (data.role) {
         console.log(`Login Success! Redirecting to ${data.role} dashboard...`);
         localStorage.setItem('jwtToken', data.token);
-        
+        localStorage.setItem('userRole', data.role);
         setSuccess(true);
         setError('');
 
         setTimeout(() => {
-          navigate(data.role === 'USER' ? '/HomePage' : '/dashboard/admin');
+          if (data.role === 'ADMIN') {
+            window.location.href = '/admin/Dashboard';
+          } else if (data.role === 'USER') {
+            window.location.href = '/HomePage';
+          } else {
+            window.location.href = '/login';
+          }
         }, 1500);
       } else {
         throw new Error('Role is missing from response');

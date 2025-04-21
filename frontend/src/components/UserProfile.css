@@ -25,7 +25,7 @@
   }
   
   .edit-button {
-    background-color: #4f46e5;
+    background-color: #22c55e;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -37,7 +37,7 @@
   }
   
   .edit-button:hover {
-    background-color: #4338ca;
+    background-color: #17813e;
   }
   
   .profile-content {
@@ -71,7 +71,7 @@
   
   .profile-form input:focus {
     outline: none;
-    border-color: #4f46e5;
+    border-color: #22c55e;
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
   }
   
@@ -98,7 +98,7 @@
   
   .save-button {
     padding: 10px 16px;
-    background-color: #4f46e5;
+    background-color: #22c55e;
     color: white;
     border: none;
     border-radius: 6px;
@@ -108,7 +108,7 @@
   }
   
   .save-button:hover {
-    background-color: #4338ca;
+    background-color: #1c7e40;
   }
   
   .profile-info {
