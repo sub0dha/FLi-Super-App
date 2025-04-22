@@ -81,7 +81,7 @@ function ProductCard({ product }) {
       </div>
 
       <div className="product-image">
-        <img src={product.image || "/placeholder.svg"} alt={product.name} />
+        <img src={product.image || "./veges.jpg"} alt={product.name} />
         <div className="product-actions">
           <button className="action-button wishlist-button" title="Add to Wishlist">
             <svg
@@ -121,8 +121,8 @@ function ProductCard({ product }) {
         <h3 className="product-name">{product.name}</h3>
 
         <div className="product-rating">
-          {renderStarRating(product.rating)}
-          <span className="rating-number">({product.rating})</span>
+          {renderStarRating(product.description)}
+          <span className="rating-number">{product.description}</span>
         </div>
 
         <div className="product-price-row">
