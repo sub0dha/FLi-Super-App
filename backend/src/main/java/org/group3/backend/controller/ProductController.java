@@ -1,11 +1,13 @@
 package org.group3.backend.controller;
 
 
+import org.group3.backend.dto.ProductDTO;
 import org.group3.backend.model.Product;
 import org.group3.backend.repository.ProductRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ProductController {
@@ -22,8 +24,11 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    List<Product> getAllProducts() {
-        return productRepository.findAll();
+    List<ProductDTO> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(ProductDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/products/{id}")

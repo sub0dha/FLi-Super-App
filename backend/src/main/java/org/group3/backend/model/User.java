@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User  implements UserDetails {
-    
+public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,6 +29,9 @@ public class User  implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role; // "admin" or "user"
+
+    @OneToMany(mappedBy = "user")
+    private List<Cart> carts; // A user can have multiple carts (though usually one active cart)
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -64,5 +67,4 @@ public class User  implements UserDetails {
     public String getPassword() {
         return password;
     }
-
 }

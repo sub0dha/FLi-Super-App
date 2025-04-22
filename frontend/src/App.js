@@ -7,6 +7,7 @@ import HomePage from './components/HomePage.js';
 import ViewProducts from './components/ViewProducts.js';
 import ProductsPage from './components/ProductsPage.js';
 import UserProfile from './components/UserProfile.js';
+import CartComponent from './components/CartComponent.js';
 
 const App = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
@@ -40,6 +41,9 @@ const App = () => {
         <Route path="/products" element={<ViewProducts />} />
         <Route path="/productPage" element={<ProductsPage />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/cart" element={<CartComponent />} />
+
+        {/* Redirect to login if no match */}
       </Routes>
     </Router>
   );

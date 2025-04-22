@@ -5,10 +5,23 @@ import "./Navbar.css"
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [cartItems, setCartItems] = useState([]) // Cart state to store added items
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
+
+  const handleSearchChange = (e) => {
+    console.log("Search query: ", e.target.value)
+  }
+
+  // Function to add item to cart
+  const addToCart = (item) => {
+    setCartItems((prevItems) => [...prevItems, item]) // Adds new item to cart
+  }
+
+  // Cart count will be based on the number of items in the cart
+  const cartCount = cartItems.length
 
   return (
     <header className="navbar">
@@ -34,7 +47,12 @@ function Navbar() {
           {/* Search, Cart & Profile */}
           <div className="nav-actions">
             <div className="search-container">
-              <input type="text" placeholder="Search products..." className="search-input" />
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="search-input"
+                onChange={handleSearchChange}
+              />
               <button className="search-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                      fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,10 +70,10 @@ function Navbar() {
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
               </svg>
-              <span className="cart-count">3</span>
+              <span className="cart-count">{cartCount}</span>
             </a>
 
-            {/* Profile Button (moved here) */}
+            {/* Profile Button */}
             <a href="/profile" className="profile-button">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                    fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
