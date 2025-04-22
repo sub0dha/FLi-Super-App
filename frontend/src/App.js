@@ -7,6 +7,7 @@ import HomePage from './components/HomePage.js';
 import ViewProducts from './components/ViewProducts.js';
 import ProductsPage from './components/ProductsPage.js';
 import UserProfile from './components/UserProfile.js';
+import CartPage from './components/CartPage.js';
 
 const App = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
@@ -22,7 +23,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<RegistrationPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
 
         {/* Role-based access */}
@@ -40,6 +41,9 @@ const App = () => {
         <Route path="/products" element={<ViewProducts />} />
         <Route path="/productPage" element={<ProductsPage />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
+
       </Routes>
     </Router>
   );
