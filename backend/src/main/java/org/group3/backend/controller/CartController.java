@@ -71,7 +71,23 @@ public class CartController {
         return ResponseEntity.ok(cartRepository.save(cart));
     }
 
-    // Update quantity
+    // Update item quantity in cart
+    @PutMapping("/{cartId}/items/{productId}")
+    @Transactional
+    public ResponseEntity<Cart> updateCartItemQuantity(
+            @PathVariable Long cartId,
+            @PathVariable Long productId,
+            @RequestBody Map<String, Integer> payload) {
+
+        int quantity = payload.get("quantity");
+
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+
+        cart.updateItemQuantity(productId, quantity);
+
+        return ResponseEntity.ok(cartRepository.save(cart));
+    }
 
 
     // delete products and clear cart
