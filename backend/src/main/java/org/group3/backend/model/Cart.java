@@ -45,4 +45,14 @@ public class Cart {
         this.items.add(item);
         recalculateTotalPrice();
     }
+    
+    public void updateItemQuantity(Long productId, int quantity) {
+        for (CartItem item : this.items) {
+            if (item.getProduct().getId() == productId) {
+                item.setQuantity(quantity);
+                recalculateTotalPrice();
+                return;
+            }
+        }
+    }
 }
