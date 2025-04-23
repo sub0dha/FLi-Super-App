@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class CartItem {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +18,11 @@ public class CartItem {
 
     private int quantity;
 
-    public CartItem() {
+    public Cart() {
         this.quantity = 1;
     }
 
-    public CartItem(Product product, int quantity) {
+    public Cart(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
