@@ -30,4 +30,19 @@ public class Cart {
     public double getSubtotal() {
         return product.getPrice() * quantity;
     }
+
+    public void addItem(CartItem item) {
+        // Check if product already exists in cart
+        for (CartItem existingItem : this.items) {
+            if (existingItem.getProduct().getId() == item.getProduct().getId()) {
+                existingItem.setQuantity(existingItem.getQuantity() + item.getQuantity());
+                recalculateTotalPrice();
+                return;
+            }
+        }
+
+        // If product doesn't exist, add as new item
+        this.items.add(item);
+        recalculateTotalPrice();
+    }
 }
