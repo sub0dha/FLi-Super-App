@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import RegistrationPage from './components/RegistrationPage.js';
+// import RegistrationPage from './components/RegistrationPage.js';
 import Login from './components/Login.js';
 import AdminDashboard from './components/AdminDashboard.js';
 import HomePage from './components/HomePage.js';
@@ -21,31 +21,30 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Role-based access */}
-        <Route
-          path="/HomePage"
-          element={userRole === 'USER' ? <HomePage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/admin/Dashboard"
-          element={userRole === 'ADMIN' ? <AdminDashboard /> : <Navigate to="/login" />}
-        />
+          {/* Role-based access */}
+          <Route
+              path="/HomePage"
+              element={userRole === 'USER' ? <HomePage /> : <Navigate to="/login" />}
+          />
+          <Route
+              path="/admin/Dashboard"
+              element={userRole === 'ADMIN' ? <AdminDashboard /> : <Navigate to="/login" />}
+          />
 
-        {/* Open access routes */}
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/products" element={<ViewProducts />} />
-        <Route path="/productPage" element={<ProductsPage />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/register" element={<RegistrationPage />} />
+          {/* Open access routes */}
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/products" element={<ViewProducts />} />
+          <Route path="/productPage" element={<ProductsPage />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/cart" element={<CartPage />} />
 
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
   );
 };
 

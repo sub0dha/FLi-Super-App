@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getOrCreateCartId } from "../utils/cartUtils"
+import { getOrCreateCartId } from "../utils/cartUtils.js"
 import { Link } from "react-router-dom"
 import "./CartPage.css"
 
