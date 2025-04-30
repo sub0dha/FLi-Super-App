@@ -2,8 +2,10 @@ package org.group3.backend.controller;
 
 import jakarta.transaction.Transactional;
 import org.group3.backend.model.Cart;
+import org.group3.backend.model.CartItem;
 import org.group3.backend.model.Product;
 import org.group3.backend.repository.CartItemRepository;
+import org.group3.backend.repository.CartRepository;
 import org.group3.backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class CartController {
 
     @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private CartItemRepository cartItemRepository;
@@ -64,6 +67,7 @@ public class CartController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough stock available");
         }
 
+        CartItem cartItem = new CartItem(product, quantity);
         cart.addItem(cartItem);
 
         return ResponseEntity.ok(cartRepository.save(cart));
@@ -87,7 +91,30 @@ public class CartController {
         return ResponseEntity.ok(cartRepository.save(cart));
     }
 
+    // Remove item from cart
+    @DeleteMapping("/{cartId}/items/{productId}")
+    @Transactional
+    public ResponseEntity<Cart> removeItemFromCart(
+            @PathVariable Long cartId,
+            @PathVariable Long productId) {
 
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
 
+        cart.removeItem(productId);
 
+        return ResponseEntity.ok(cartRepository.save(cart));
     }
+
+    // Clear cart
+    @DeleteMapping("/{cartId}")
+    @Transactional
+    public ResponseEntity<Cart> clearCart(@PathVariable Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+
+        cart.clear();
+
+        return ResponseEntity.ok(cartRepository.save(cart));
+    }
+}
