@@ -15,4 +15,3 @@ export const getOrCreateCartId = async () => {
     }
     return cartId
   }
-  
