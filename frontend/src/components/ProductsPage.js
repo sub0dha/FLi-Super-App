@@ -20,23 +20,22 @@ function ProductsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // fetch products from the backend
   useEffect(() => {
-    fetch("http://localhost:8080/products") // Change to your actual API URL
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch products")
-        }
-        return res.json()
-      })
-      .then((data) => {
-        setProducts(data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setError(err.message)
-        setLoading(false)
-      })
+    fetch("http://localhost:8080/products")
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to fetch products")
+          }
+          return res.json()
+        })
+        .then((data) => {
+          setProducts(data)
+          setLoading(false)
+        })
+        .catch((err) => {
+          setError(err.message)
+          setLoading(false)
+        })
   }, [])
 
   const [selectedCategory, setSelectedCategory] = useState("All Products")
@@ -89,118 +88,118 @@ function ProductsPage() {
   }
 
   return (
-    <div className="products-page">
-      <Navbar />
-      <div className="container">
-        <div className="products-header">
-          <h1>Our Products</h1>
-          <p>Browse our wide selection of high-quality products</p>
-        </div>
-
-        <div className="products-controls">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="search-input"
-            />
+      <div className="products-page">
+        <Navbar />
+        <div className="container">
+          <div className="products-header">
+            <h1>Our Products</h1>
+            <p>Browse our wide selection of high-quality products</p>
           </div>
 
-          <div className="sort-container">
-            <label htmlFor="sort">Sort by:</label>
-            <select
-              id="sort"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className="sort-select"
-            >
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="rating">Top Rated</option>
-              <option value="name-asc">Name: A to Z</option>
-              <option value="name-desc">Name: Z to A</option>
-            </select>
-          </div>
-        </div>
+          <div className="products-controls">
+            <div className="search-container">
+              <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="search-input"
+              />
+            </div>
 
-        <div className="products-layout">
-          <div className="categories-sidebar">
-            <h3>Categories</h3>
-            <ul className="category-list">
-              {categories.map((category, index) => (
-                <li key={index}>
-                  <button
-                    className={`category-button ${selectedCategory === category ? "active" : ""}`}
-                    onClick={() => handleCategoryChange(category)}
-                  >
-                    {category}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <div className="sort-container">
+              <label htmlFor="sort">Sort by:</label>
+              <select
+                  id="sort"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                  className="sort-select"
+              >
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
+                <option value="name-asc">Name: A to Z</option>
+                <option value="name-desc">Name: Z to A</option>
+              </select>
+            </div>
           </div>
 
-          <div className="products-container">
-            {loading ? (
-              <p>Loading products...</p>
-            ) : error ? (
-              <p style={{ color: "red" }}>{error}</p>
-            ) : (
-              <>
-                <div className="products-count">
-                  Showing {currentProducts.length} of {filteredProducts.length} products
-                </div>
+          <div className="products-layout">
+            <div className="categories-sidebar">
+              <h3>Categories</h3>
+              <ul className="category-list">
+                {categories.map((category, index) => (
+                    <li key={index}>
+                      <button
+                          className={`category-button ${selectedCategory === category ? "active" : ""}`}
+                          onClick={() => handleCategoryChange(category)}
+                      >
+                        {category}
+                      </button>
+                    </li>
+                ))}
+              </ul>
+            </div>
 
-                {currentProducts.length === 0 ? (
-                  <div className="no-products">
-                    <p>No products found.</p>
-                  </div>
-                ) : (
-                  <div className="products-grid">
-                    {currentProducts.map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                )}
-
-                {totalPages > 1 && (
-                  <div className="pagination">
-                    <button
-                      className="pagination-button"
-                      disabled={currentPage === 1}
-                      onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                      &laquo; Previous
-                    </button>
-                    <div className="pagination-numbers">
-                      {[...Array(totalPages)].map((_, index) => (
-                        <button
-                          key={index}
-                          className={`pagination-number ${currentPage === index + 1 ? "active" : ""}`}
-                          onClick={() => handlePageChange(index + 1)}
-                        >
-                          {index + 1}
-                        </button>
-                      ))}
+            <div className="products-container">
+              {loading ? (
+                  <p>Loading products...</p>
+              ) : error ? (
+                  <p style={{ color: "red" }}>{error}</p>
+              ) : (
+                  <>
+                    <div className="products-count">
+                      Showing {currentProducts.length} of {filteredProducts.length} products
                     </div>
-                    <button
-                      className="pagination-button"
-                      disabled={currentPage === totalPages}
-                      onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                      Next &raquo;
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+
+                    {currentProducts.length === 0 ? (
+                        <div className="no-products">
+                          <p>No products found.</p>
+                        </div>
+                    ) : (
+                        <div className="products-grid">
+                          {currentProducts.map((product) => (
+                              <ProductCard key={product.id} product={product} />
+                          ))}
+                        </div>
+                    )}
+
+                    {totalPages > 1 && (
+                        <div className="pagination">
+                          <button
+                              className="pagination-button"
+                              disabled={currentPage === 1}
+                              onClick={() => handlePageChange(currentPage - 1)}
+                          >
+                            &laquo; Previous
+                          </button>
+                          <div className="pagination-numbers">
+                            {[...Array(totalPages)].map((_, index) => (
+                                <button
+                                    key={index}
+                                    className={`pagination-number ${currentPage === index + 1 ? "active" : ""}`}
+                                    onClick={() => handlePageChange(index + 1)}
+                                >
+                                  {index + 1}
+                                </button>
+                            ))}
+                          </div>
+                          <button
+                              className="pagination-button"
+                              disabled={currentPage === totalPages}
+                              onClick={() => handlePageChange(currentPage + 1)}
+                          >
+                            Next &raquo;
+                          </button>
+                        </div>
+                    )}
+                  </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
   )
 }
 
