@@ -7,6 +7,7 @@ import ViewProducts from './components/ViewProducts.js';
 import ProductsPage from './components/ProductsPage.js';
 import UserProfile from './components/UserProfile.js';
 import CartPage from './components/CartPage.js';
+import Login from './components/Login.js';
 
 const App = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
@@ -34,6 +35,7 @@ const App = () => {
 
           {/* Open access routes */}
           <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/products" element={<ViewProducts />} />
           <Route path="/productPage" element={<ProductsPage />} />

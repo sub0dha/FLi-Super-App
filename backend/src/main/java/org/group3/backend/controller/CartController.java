@@ -1,6 +1,7 @@
 package org.group3.backend.controller;
 
 import jakarta.transaction.Transactional;
+import org.group3.backend.Service.EmailService;
 import org.group3.backend.model.Cart;
 import org.group3.backend.model.CartItem;
 import org.group3.backend.model.Product;
@@ -28,6 +29,9 @@ public class CartController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     // Get cart by id
     @GetMapping("/{id}")
@@ -117,4 +121,33 @@ public class CartController {
 
         return ResponseEntity.ok(cartRepository.save(cart));
     }
+
+    // Sending confirmation email
+    @PostMapping("/{cartId}/confirm")
+    public ResponseEntity<?> confirmOrder(@PathVariable Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+
+        // Hardcoded email (for now) – ideally, fetch from cart.getUser().getEmail()
+        String userEmail = "mnaveeth235@gmail.com";
+
+        StringBuilder emailContent = new StringBuilder("Thank you for your order!\n\nOrder Summary:\n");
+        double total = 0;
+
+        for (CartItem item : cart.getItems()) {
+            double subtotal = item.getQuantity() * item.getProduct().getPrice();
+            total += subtotal;
+            emailContent.append(item.getProduct().getName())
+                    .append(" x ").append(item.getQuantity())
+                    .append(" = Rs. ").append(subtotal).append("\n");
+        }
+
+        emailContent.append("\nTotal: Rs. ").append(total);
+
+        // Send the email
+        emailService.sendOrderConfirmationEmail(userEmail, emailContent.toString());
+
+        return ResponseEntity.ok("Order confirmed and email sent.");
+    }
+
 }

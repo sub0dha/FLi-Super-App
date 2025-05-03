@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { getOrCreateCartId } from "../utils/cartUtils"
+import { getOrCreateCartId } from "../utils/CartUtils"
 import "./ProductCard.css"
 
 function ProductCard({ product }) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getOrCreateCartId } from "../utils/cartUtils.js"
+import { getOrCreateCartId } from "../utils/CartUtils.js"
 import { Link } from "react-router-dom"
 import "./CartPage.css"
 
@@ -19,6 +19,20 @@ function CartPage() {
       setError(err.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const confirmOrder = async () => {
+    const cartId = localStorage.getItem("cartId")
+    try {
+      const res = await fetch(`http://localhost:8080/cart/${cartId}/confirm`, {
+        method: "POST",
+      })
+      if (!res.ok) throw new Error("Failed to confirm order")
+      alert("Order confirmed! A confirmation email has been sent.")
+      // clearCart()
+    } catch (err) {
+      alert("Error confirming order: " + err.message)
     }
   }
 
@@ -103,6 +117,9 @@ function CartPage() {
       <div className="cart-summary">
         <p>Total: <strong>Rs. {cart.totalPrice.toFixed(2)}</strong></p>
         <button className="clear-button" onClick={clearCart}>Clear Cart</button>
+        <button className="confirm-button" onClick={confirmOrder}>
+          Confirm Order
+        </button>
       </div>
     </div>
   )
