@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-// import RegistrationPage from './components/RegistrationPage.js';
+import RegistrationPage from './components/RegistrationPage.js';
 import Login from './components/Login.js';
 import AdminDashboard from './components/AdminDashboard.js';
 import HomePage from './components/HomePage.js';
@@ -23,7 +23,7 @@ const App = () => {
   return (
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
 
           {/* Role-based access */}
@@ -37,6 +37,7 @@ const App = () => {
           />
 
           {/* Open access routes */}
+          <Route path="/register" element={<RegistrationPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/products" element={<ViewProducts />} />
           <Route path="/productPage" element={<ProductsPage />} />

@@ -36,6 +36,7 @@ const Login = () => {
         console.log(`Login Success! Redirecting to ${data.role} dashboard...`);
         localStorage.setItem('jwtToken', data.token);
         localStorage.setItem('userRole', data.role);
+        localStorage.setItem('userEmail', email);
         setSuccess(true);
         setError('');
 
