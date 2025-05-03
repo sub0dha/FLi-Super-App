@@ -32,7 +32,6 @@ function RegistrationPage() {
     setError('');
     setSuccess('');
 
-    try {
       const response = await fetch('http://localhost:8080/api/v1/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,23 +41,20 @@ function RegistrationPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Registration failed!');
+        setError(data.message || 'Registration failed!');
+        return;
       }
 
       setSuccess('Registration successful! You can now log in.');
-
       // Reset form fields after success
       setFormData({ firstName: '', lastName: '', email: '', password: '' });
-    } catch (err) {
-      setError(err.message);
-    }
   };
 
   return (
     
     <div className="registration-container">  
       <div className="registration-form">
-        <img src={Logo} alt="Logo" className="logo" />
+        <img src={Logo} alt="Logo" className="fli-logo" />
         <h2 className="welcome-message" >Welcome to Fli Super</h2>
         <h2 className="registration-title">Register</h2>
         <form onSubmit={handleSubmit} autoComplete="off">

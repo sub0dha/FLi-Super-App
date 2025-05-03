@@ -7,6 +7,7 @@ import ViewProducts from './components/ViewProducts.js';
 import ProductsPage from './components/ProductsPage.js';
 import UserProfile from './components/UserProfile.js';
 import CartPage from './components/CartPage.js';
+import Login from "./components/Login";
 
 const App = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
@@ -24,7 +25,7 @@ const App = () => {
         <Routes>
           {/* Role-based access */}
           <Route
-              path="/HomePage"
+              path="/"
               element={userRole === 'USER' ? <HomePage /> : <Navigate to="/login" />}
           />
           <Route
@@ -33,6 +34,7 @@ const App = () => {
           />
 
           {/* Open access routes */}
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/products" element={<ViewProducts />} />
