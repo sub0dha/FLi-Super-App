@@ -13,6 +13,7 @@ function RegistrationPage() {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Clear fields when component loads
   useEffect(() => {
@@ -25,16 +26,18 @@ function RegistrationPage() {
       ...prevState,
       [name]: value
     }));
+    setError(''); // Clear error on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
+    setLoading(true);
+    try {
       const response = await fetch('http://localhost:8080/api/v1/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData),
       });
 
@@ -47,7 +50,13 @@ function RegistrationPage() {
 
       setSuccess('Registration successful! You can now log in.');
       // Reset form fields after success
-      setFormData({ firstName: '', lastName: '', email: '', password: '' });
+      setFormData({firstName: '', lastName: '', email: '', password: ''});
+    } catch (e) {
+      console.error(e);
+      setError('Network error, please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -114,8 +123,8 @@ function RegistrationPage() {
             />
           </div>
 
-          <button type="submit" className="submit-button">
-            Register
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
           </button>
 
           {error && <p style={{ color: 'red' }}>{error}</p>}

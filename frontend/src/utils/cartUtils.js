@@ -4,11 +4,10 @@ export const getOrCreateCartId = async () => {
       const res = await fetch("http://localhost:8080/cart", {
         method: "POST",
       })
-  
       if (!res.ok) {
         throw new Error("Failed to create a new cart")
       }
-  
+
       const data = await res.json()
       cartId = data.id
       localStorage.setItem("cartId", cartId)

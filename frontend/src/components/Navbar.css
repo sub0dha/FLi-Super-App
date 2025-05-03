@@ -16,12 +16,12 @@
 }
 
 /* Logo */
-.logo {
+.navbar-content .logo {
   display: flex;
   align-items: center;
   font-size: 24px;
   font-weight: 700;
-  margin-top: 5px;
+  margin-top: 0;
 }
 
 .logo-fli {
@@ -63,18 +63,21 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 .search-container {
   position: relative;
-  margin-right: 5px;
-  display: none;
+  margin-right: 24px;
+  display: flex;
+  flex: 1;
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
   .search-container {
-    display: block;
+    margin-right: 24px;
+    display: flex;
   }
 }
 
@@ -103,7 +106,6 @@
 }
 
 .cart-button {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css'; 
 import Logo from '../assets/Logo.png';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 
 const Login = () => {
@@ -9,6 +9,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Clear fields when component loads
   useEffect(() => {
@@ -18,15 +20,21 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess(false);
 
+    try {
       const response = await fetch('http://localhost:8080/api/v1/auth/authenticate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password}),
       });
 
       if (!response.ok) {
-        setError('Login failed!');
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed!');
+        return; // Stop further execution
       }
 
       const data = await response.json();
@@ -42,16 +50,22 @@ const Login = () => {
 
         setTimeout(() => {
           if (data.role === 'ADMIN') {
-            window.location.href = '/admin/Dashboard';
+            navigate('/admin/Dashboard');
           } else if (data.role === 'USER') {
-            window.location.href = '/HomePage';
+            navigate('/home');
           } else {
-            window.location.href = '/login';
+            navigate('/login');
           }
         }, 1500);
       } else {
         setError('Role is missing from response');
       }
+    } catch (e) {
+      console.error(e);
+      setError('Network error, please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,9 +78,12 @@ const Login = () => {
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setError('');
+          }}
           required
-          autoComplete="on"
+          autoComplete="username"
         />
         <input
           type="password"
@@ -74,9 +91,11 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          autoComplete="on"
+          autoComplete="current-password"
         />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">Login Successful! Redirecting...</p>}
         {/* Link to registration page if user want to create an account */}
