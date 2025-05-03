@@ -117,3 +117,21 @@
         width: 250px;
     }
 }
+
+.redirect-register {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.redirect-register a {
+    color: #388E3C;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.redirect-register a:hover {
+    text-decoration: underline;
+    color: #2E7D32;
+}

@@ -14,4 +14,4 @@ export const getOrCreateCartId = async () => {
       localStorage.setItem("cartId", cartId)
     }
     return cartId
-  }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css'; 
 import Logo from '../assets/Logo.png';
+import {Link} from "react-router-dom";
 
 
 const Login = () => {
@@ -18,7 +19,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
       const response = await fetch('http://localhost:8080/api/v1/auth/authenticate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -26,7 +26,7 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed!');
+        setError('Login failed!');
       }
 
       const data = await response.json();
@@ -50,13 +50,8 @@ const Login = () => {
           }
         }, 1500);
       } else {
-        throw new Error('Role is missing from response');
+        setError('Role is missing from response');
       }
-    } catch (err) {
-      setError(err.message);
-      setSuccess(false);
-      console.error(err.message);
-    }
   };
 
   return (
@@ -84,6 +79,10 @@ const Login = () => {
         <button type="submit">Login</button>
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">Login Successful! Redirecting...</p>}
+        {/* Link to registration page if user want to create an account */}
+        <p className="redirect-register">
+          Don't have an account? <Link to="/register">Register here</Link>
+        </p>
       </form>
     </div>
   );
