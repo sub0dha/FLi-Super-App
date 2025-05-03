@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.group3.backend.config.JwtService;
 import org.group3.backend.model.Role;
 import org.group3.backend.model.User;
+import org.group3.backend.repository.AdminEmailRepository;
 import org.group3.backend.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,14 +20,19 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AdminEmailRepository adminEmailRepository;
+
 
     public AuthenticationResponse register(RegisterRequest request) {
+        Role assignedRole = adminEmailRepository.existsByEmail(request.getEmail())
+                ? Role.ADMIN
+                : Role.USER;
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(assignedRole)
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -43,8 +49,15 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
+
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (adminEmailRepository.existsByEmail(user.getEmail())) {
+            user.setRole(Role.ADMIN);
+            user = userRepository.save(user);
+        }
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

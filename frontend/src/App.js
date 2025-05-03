@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RegistrationPage from './components/RegistrationPage.js';
-import Login from './components/Login.js';
 import AdminDashboard from './components/AdminDashboard.js';
 import HomePage from './components/HomePage.js';
 import ViewProducts from './components/ViewProducts.js';
@@ -23,9 +22,6 @@ const App = () => {
   return (
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-
           {/* Role-based access */}
           <Route
               path="/HomePage"
