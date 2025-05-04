@@ -1,206 +1,109 @@
-import { useEffect, useState } from "react"
-import Navbar from "./Navbar"
-import ProductCard from "./ProductCard"
-import "./ProductsPage.css"
+import React, { useState } from 'react';
+import './ProductForm.css'; // Import the CSS
 
-function ProductsPage() {
-  const categories = [
-    "All Products",
-    "Fruits & Vegetables",
-    "Meat & Seafood",
-    "Dairy & Eggs",
-    "Bakery",
-    "Frozen Foods",
-    "Beverages",
-    "Snacks",
-    "Household",
-  ]
+function ProductForm({ onClose }) {
+    const [product, setProduct] = useState({
+        name: '',
+        description: '',
+        price: '',
+        category: '',
+        stock_quantity: '',
+    });
 
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+    const handleChange = (e) => {
+        setProduct({ ...product, [e.target.name]: e.target.value });
+    };
 
-  useEffect(() => {
-    fetch("http://localhost:8080/products")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch products")
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8080/products/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(product),
+            });
+
+            if (response.ok) {
+                console.log('Product added successfully!');
+                // Clear the form or redirect
+                setProduct({ name: '', description: '', price: '', category: '', stock_quantity: '' });
+                if (onClose) { // Call onClose if it's provided
+                    onClose();
+                }
+            } else {
+                console.error('Failed to add product');
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-        return res.json()
-      })
-      .then((data) => {
-        setProducts(data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setError(err.message)
-        setLoading(false)
-      })
-  }, [])
+    };
 
-  const [selectedCategory, setSelectedCategory] = useState("All Products")
-  const [sortOption, setSortOption] = useState("featured")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [searchQuery, setSearchQuery] = useState("")
-  const productsPerPage = 8
-
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory = selectedCategory === "All Products" || product.category === selectedCategory
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortOption) {
-      case "price-low":
-        return a.price - b.price
-      case "price-high":
-        return b.price - a.price
-      case "rating":
-        return b.rating - a.rating
-      case "name-asc":
-        return a.name.localeCompare(b.name)
-      case "name-desc":
-        return b.name.localeCompare(a.name)
-      default:
-        return 0
-    }
-  })
-
-  const indexOfLastProduct = currentPage * productsPerPage
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage
-  const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage)
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-    window.scrollTo(0, 0)
-  }
-
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category)
-    setCurrentPage(1)
-  }
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value)
-    setCurrentPage(1)
-  }
-
-  return (
-    <div className="products-page">
-      <Navbar />
-      <div className="container">
-        <div className="products-header">
-          <h1>Our Products</h1>
-          <p>Browse our wide selection of high-quality products</p>
-        </div>
-
-        <div className="products-controls">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              className="search-input"
-            />
-          </div>
-
-          <div className="sort-container">
-            <label htmlFor="sort">Sort by:</label>
-            <select
-              id="sort"
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className="sort-select"
-            >
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="rating">Top Rated</option>
-              <option value="name-asc">Name: A to Z</option>
-              <option value="name-desc">Name: Z to A</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="products-layout">
-          <div className="categories-sidebar">
-            <h3>Categories</h3>
-            <ul className="category-list">
-              {categories.map((category, index) => (
-                <li key={index}>
-                  <button
-                    className={`category-button ${selectedCategory === category ? "active" : ""}`}
-                    onClick={() => handleCategoryChange(category)}
-                  >
-                    {category}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="products-container">
-            {loading ? (
-              <p>Loading products...</p>
-            ) : error ? (
-              <p style={{ color: "red" }}>{error}</p>
-            ) : (
-              <>
-                <div className="products-count">
-                  Showing {currentProducts.length} of {filteredProducts.length} products
-                </div>
-
-                {currentProducts.length === 0 ? (
-                  <div className="no-products">
-                    <p>No products found.</p>
-                  </div>
-                ) : (
-                  <div className="products-grid">
-                    {currentProducts.map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                )}
-
-                {totalPages > 1 && (
-                  <div className="pagination">
-                    <button
-                      className="pagination-button"
-                      disabled={currentPage === 1}
-                      onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                      &laquo; Previous
+    return (
+        <div className={ "product-form"}>
+            <h2>Add Product</h2>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Name:
+                    <input
+                        type="text"
+                        name="name"
+                        value={product.name}
+                        onChange={handleChange}
+                    />
+                </label>
+                <br/>
+                <label>
+                    Description:
+                    <input
+                        type="text"
+                        name="description"
+                        value={product.description}
+                        onChange={handleChange}
+                    />
+                </label>
+                <br/>
+                <label>
+                    Price:
+                    <input
+                        type="number"
+                        name="price"
+                        value={product.price}
+                        onChange={handleChange}
+                    />
+                </label>
+                <br/>
+                <label>
+                    Category:
+                    <input
+                        type="text"
+                        name="category"
+                        value={product.category}
+                        onChange={handleChange}
+                    />
+                </label>
+                <br/>
+                <label>
+                    Stock Quantity:
+                    <input
+                        type="number"
+                        name="stock_quantity"
+                        value={product.stock_quantity}
+                        onChange={handleChange}
+                    />
+                </label>
+                <br/>
+                <button type="submit">Add Product</button>
+                <br/> {/* Add a line break to push the Cancel button down */}
+                {onClose && ( // Conditionally render the cancel button if onClose is provided
+                    <button type="button" onClick={onClose} className="cancel-button">
+                        Cancel
                     </button>
-                    <div className="pagination-numbers">
-                      {[...Array(totalPages)].map((_, index) => (
-                        <button
-                          key={index}
-                          className={`pagination-number ${currentPage === index + 1 ? "active" : ""}`}
-                          onClick={() => handlePageChange(index + 1)}
-                        >
-                          {index + 1}
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      className="pagination-button"
-                      disabled={currentPage === totalPages}
-                      onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                      Next &raquo;
-                    </button>
-                  </div>
                 )}
-              </>
-            )}
-          </div>
+            </form>
         </div>
-      </div>
-    </div>
-  )
+    );
 }
 
-export default ProductsPage
+export default ProductForm;
