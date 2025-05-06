@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final Path rootLocation = Paths.get("uploads/product-images");
+    private final Path rootLocation = Paths.get("frontend/public/uploads/product-images");
 
     @PostConstruct
     public void init() {
