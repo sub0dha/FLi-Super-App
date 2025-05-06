@@ -1,8 +1,9 @@
+import "./ProductsPage.css"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import Navbar from "./Navbar"
 import ProductCard from "./ProductCard"
-import "./ProductsPage.css"
+import {loadCategories} from "../utils/categoryUtils";
 
 function ProductsPage() {
 
@@ -10,13 +11,9 @@ function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([])
 
-
   useEffect(() => {
-    fetch("http://localhost:8080/categories")
-        .then(res => res.json())
-        .then(data => setCategories(data))
-        .catch(err => console.error("Failed to load categories", err))
-  }, [])
+    loadCategories().then(setCategories);
+  }, []);
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -131,12 +128,12 @@ function ProductsPage() {
               <h3>Categories</h3>
               <ul className="category-list">
                 {categories.map((category, index) => (
-                    <li key={index}>
+                    <li key={index || category.id}>
                       <button
-                          className={`category-button ${selectedCategory === category ? "active" : ""}`}
-                          onClick={() => handleCategoryChange(category)}
+                          className={`category-button ${selectedCategory === category.name ? "active" : ""}`}
+                          onClick={() => handleCategoryChange(category.name)}
                       >
-                        {category}
+                        {category.name}
                       </button>
                     </li>
                 ))}

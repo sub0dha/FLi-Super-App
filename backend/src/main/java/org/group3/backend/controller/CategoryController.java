@@ -1,5 +1,6 @@
 package org.group3.backend.controller;
 
+import org.group3.backend.model.Category;
 import org.group3.backend.service.CategoryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<String> getCategories() {
-        return categoryService.getAllCategoryNames();
+    public List<Category> getCategories() {
+        return categoryService.getAllCategories();
     }
 }
 

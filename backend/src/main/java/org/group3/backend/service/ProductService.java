@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -47,6 +48,10 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    public List<Product> searchProducts(String query) {
+        return productRepository.searchProducts(query);
+    }
+
     private String storeImage(MultipartFile file) {
         try {
             String filename = StringUtils.cleanPath(
@@ -55,7 +60,7 @@ public class ProductService {
 
             Path destination = this.rootLocation.resolve(filename);
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-            return destination.toString();
+            return "/uploads/product-images/" + filename;
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file", e);

@@ -24,4 +24,7 @@ public class ProductDTO {
         this.stock_quantity = product.getStock_quantity();
         this.inStock = product.getStock_quantity() > 0;
     }
+
+    public ProductDTO(String name, String description, double price, String category, int stockQuantity) {
+    }
 }

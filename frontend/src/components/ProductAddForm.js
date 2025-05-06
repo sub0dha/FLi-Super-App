@@ -12,8 +12,12 @@ function ProductAddForm({ onClose }) {
 
     const [imageFile, setImageFile] = useState(null);
 
+    const [imagePreview, setImagePreview] = useState(null);
+
     const handleImageChange = (e) => {
-        setImageFile(e.target.files[0]);
+        const file = e.target.files[0];
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file));
     };
 
     const handleChange = (e) => {
@@ -35,9 +39,9 @@ const handleSubmit = async (e) => {
   const formData = new FormData();
   formData.append("name", product.name);
   formData.append("description", product.description);
-  formData.append("price", product.price);
+  formData.append("price", parseFloat(product.price));
   formData.append("category", product.category);
-  formData.append("stock_quantity", product.stock_quantity);
+  formData.append("stock_quantity", parseInt(product.stock_quantity));
 
   if (imageFile) {
     formData.append("image", imageFile);
@@ -65,7 +69,7 @@ const handleSubmit = async (e) => {
 };
 
     return (
-        <div className={ "product-form"}>
+        <div className={"product-form"}>
             <h2>Add Product</h2>
             <form onSubmit={handleSubmit}>
                 <label>
@@ -105,8 +109,8 @@ const handleSubmit = async (e) => {
                             Select a category
                         </option>
                         {categories.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
+                            <option key={cat.id} value={cat.name} disabled={cat.name === "All Products"}>
+                                {cat.name}
                             </option>
                         ))}
                     </select>
@@ -131,6 +135,7 @@ const handleSubmit = async (e) => {
                         onChange={handleImageChange}
                     />
                 </label>
+                {imagePreview && <img className={"preview-img"} src={imagePreview} alt="Preview" />}
                 <br/>
                 <button type="submit">Add Product</button>
                 <br/> {/* Add a line break to push the Cancel button down */}

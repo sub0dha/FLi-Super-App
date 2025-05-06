@@ -50,6 +50,7 @@ function CartPage() {
       method: "DELETE",
     })
     localStorage.removeItem("cartId")
+    window.dispatchEvent(new Event("cartCountUpdated"));
     fetchCart()
   }
 

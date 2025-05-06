@@ -10,13 +10,14 @@ function Navbar() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+    navigate(`/products/?query=${encodeURIComponent(searchQuery)}`);
   };
 
   // Function to update the cart count from localStorage
   const updateCartCountFromStorage = () => {
     const stored = localStorage.getItem("cartCount");
-    setCartCount(parseInt(stored) || 0);
+    const count = stored ? parseInt(stored, 10) : 0;
+    setCartCount(isNaN(count) ? 0 : count);
   };
 
   useEffect(() => {
