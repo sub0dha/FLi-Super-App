@@ -450,7 +450,7 @@
   
   @media (min-width: 992px) {
     .footer-content {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   
@@ -529,5 +529,7 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 0.9rem;
   }
-  
-  
+
+.footer-column .logo-super {
+  color: #e0e0e0;
+}

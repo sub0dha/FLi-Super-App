@@ -16,7 +16,7 @@ public class ProductDTO {
     private boolean inStock;
 
     public ProductDTO(Product product) {
-        this.id = (long) product.getId();
+        this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
@@ -24,9 +24,4 @@ public class ProductDTO {
         this.stock_quantity = product.getStock_quantity();
         this.inStock = product.getStock_quantity() > 0;
     }
-
-    // Getters and Setters
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
-
 }

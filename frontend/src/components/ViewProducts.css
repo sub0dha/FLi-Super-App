@@ -206,7 +206,7 @@ td:nth-child(6)::after {
 }
 
 /* Form styling (maintains original structure) */
-/* Assuming ProductForm has its own styling, 
+/* Assuming ProductAddForm has its own styling,
    but adding some basic overlay styling here */
 .product-form {
     position: fixed;

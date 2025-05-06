@@ -13,7 +13,7 @@ const AdminDashboard = () => {
         <nav>
           <ul>
             <li><a href="/admin">Home</a></li>
-            <li><a href="/products">Products</a></li>
+            <li><a href="/admin/products">Products</a></li>
             <li><a href="/admin/users">Users</a></li>
             <li><a href="/admin/profile">Profile</a></li>
             <li><a href="/admin/settings">Settings</a></li>

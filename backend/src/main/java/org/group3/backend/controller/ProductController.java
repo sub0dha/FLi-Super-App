@@ -1,10 +1,12 @@
 package org.group3.backend.controller;
 
-
 import org.group3.backend.dto.ProductDTO;
 import org.group3.backend.model.Product;
 import org.group3.backend.repository.ProductRepository;
+import org.group3.backend.service.ProductService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,17 +15,22 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductService productService) {
         this.productRepository = productRepository;
+        this.productService = productService;
     }
 
-    @PostMapping("/products/add")
-    Product addProduct(@RequestBody Product product) {
-        return productRepository.save(product);
+    @PostMapping("/admin/products/add")
+    ResponseEntity<Product> addProduct(
+            @RequestPart("product") ProductDTO productDTO,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile) {
+        Product savedProduct = productService.createProduct(productDTO, imageFile);
+        return ResponseEntity.ok(savedProduct);
     }
 
-    @GetMapping("/products")
+    @GetMapping({"/products", "/admin/products"})
     List<ProductDTO> getAllProducts() {
         return productRepository.findAll()
                 .stream()

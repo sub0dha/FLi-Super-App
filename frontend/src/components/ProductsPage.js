@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 import Navbar from "./Navbar"
 import ProductCard from "./ProductCard"
 import "./ProductsPage.css"
 
 function ProductsPage() {
-  const categories = [
-    "All Products",
-    "Fruits & Vegetables",
-    "Meat & Seafood",
-    "Dairy & Eggs",
-    "Bakery",
-    "Frozen Foods",
-    "Beverages",
-    "Snacks",
-    "Household",
-  ]
+
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([])
+
+
+  useEffect(() => {
+    fetch("http://localhost:8080/categories")
+        .then(res => res.json())
+        .then(data => setCategories(data))
+        .catch(err => console.error("Failed to load categories", err))
+  }, [])
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -41,7 +43,6 @@ function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Products")
   const [sortOption, setSortOption] = useState("featured")
   const [currentPage, setCurrentPage] = useState(1)
-  const [searchQuery, setSearchQuery] = useState("")
   const productsPerPage = 8
 
   const filteredProducts = products.filter((product) => {
