@@ -7,11 +7,13 @@ import org.group3.backend.model.Product;
 import org.group3.backend.repository.CartItemRepository;
 import org.group3.backend.repository.CartRepository;
 import org.group3.backend.repository.ProductRepository;
+import org.group3.backend.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +30,9 @@ public class CartController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     // Get cart by id
     @GetMapping("/{id}")
@@ -116,5 +121,30 @@ public class CartController {
         cart.clear();
 
         return ResponseEntity.ok(cartRepository.save(cart));
+    }
+
+     // Sending confirmation email
+    @PostMapping("/{cartId}/confirm")
+    public ResponseEntity<?> confirmOrder(@PathVariable Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+        String userEmail = "mnaveeth235@gmail.com";
+        StringBuilder emailContent = new StringBuilder("Order Summary:\n");
+        double total = 0;
+
+        for (CartItem item : cart.getItems()) {
+            double subtotal = item.getQuantity() * item.getProduct().getPrice();
+            total += subtotal;
+            emailContent.append(item.getProduct().getName())
+                    .append(" x ").append(item.getQuantity())
+                    .append(" = Rs. ").append(subtotal).append("\n");
+        }
+
+        emailContent.append("\nTotal: Rs. ").append(total);
+
+        // Send the email
+        emailService.sendOrderConfirmationEmail(userEmail, emailContent.toString());
+
+        return ResponseEntity.ok("Order confirmed and email sent.");
     }
 }

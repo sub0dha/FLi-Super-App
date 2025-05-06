@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import { getOrCreateCartId } from "../utils/cartUtils.js"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "./CartPage.css"
 
 function CartPage() {
   const [cart, setCart] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const navigate = useNavigate() // Add this hook for navigation
 
   const fetchCart = async () => {
     try {
@@ -51,6 +52,10 @@ function CartPage() {
     })
     localStorage.removeItem("cartId")
     fetchCart()
+  }
+
+  const handleCheckout = () => {
+    navigate("/checkout") // Navigate to checkout page
   }
 
   if (loading) return <p className="cart-message">Loading cart...</p>
@@ -102,7 +107,10 @@ function CartPage() {
 
       <div className="cart-summary">
         <p>Total: <strong>Rs. {cart.totalPrice.toFixed(2)}</strong></p>
-        <button className="clear-button" onClick={clearCart}>Clear Cart</button>
+        <div className="cart-actions">
+          <button className="clear-button" onClick={clearCart}>Clear Cart</button>
+          <button className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</button>
+        </div>
       </div>
     </div>
   )
