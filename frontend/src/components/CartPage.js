@@ -1,72 +1,105 @@
-import { useEffect, useState } from "react"
-import { getOrCreateCartId } from "../utils/cartUtils.js"
-import { Link, useNavigate } from "react-router-dom"
-import "./CartPage.css"
+import { useEffect, useState } from "react";
+import { getOrCreateCartId } from "../utils/cartUtils.js";
+import { Link, useNavigate } from "react-router-dom";
+import "./CartPage.css";
 
 function CartPage() {
-  const [cart, setCart] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const navigate = useNavigate() // Add this hook for navigation
+  const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchCart = async () => {
     try {
-      const cartId = await getOrCreateCartId()
-      const res = await fetch(`http://localhost:8080/cart/${cartId}`)
-      if (!res.ok) throw new Error("Failed to fetch cart")
-      const data = await res.json()
-      setCart(data)
+      const cartId = await getOrCreateCartId();
+      const res = await fetch(`http://localhost:8080/cart/${cartId}`);
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+      setCart(data);
     } catch (err) {
-      setError(err.message)
+      setError(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchCart()
-  }, [])
+    fetchCart();
+  }, []);
 
   const updateQuantity = async (productId, quantity) => {
-    const cartId = localStorage.getItem("cartId")
-    await fetch(`http://localhost:8080/cart/${cartId}/items/${productId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ quantity }),
-    })
-    fetchCart()
-  }
+    if (quantity < 1) return;
+    
+    try {
+      const cartId = localStorage.getItem("cartId");
+      const res = await fetch(`http://localhost:8080/cart/${cartId}/items/${productId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity }),
+      });
+      
+      if (!res.ok) throw new Error("Failed to update quantity");
+      fetchCart();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   const removeItem = async (productId) => {
-    const cartId = localStorage.getItem("cartId")
-    await fetch(`http://localhost:8080/cart/${cartId}/items/${productId}`, {
-      method: "DELETE",
-    })
-    fetchCart()
-  }
+    try {
+      const cartId = localStorage.getItem("cartId");
+      const res = await fetch(`http://localhost:8080/cart/${cartId}/items/${productId}`, {
+        method: "DELETE",
+      });
+      
+      if (!res.ok) throw new Error("Failed to remove item");
+      fetchCart();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   const clearCart = async () => {
-    const cartId = localStorage.getItem("cartId")
-    await fetch(`http://localhost:8080/cart/${cartId}`, {
-      method: "DELETE",
-    })
-    localStorage.removeItem("cartId")
-    fetchCart()
-  }
+    try {
+      const cartId = localStorage.getItem("cartId");
+      const res = await fetch(`http://localhost:8080/cart/${cartId}`, {
+        method: "DELETE",
+      });
+      
+      if (!res.ok) throw new Error("Failed to clear cart");
+      localStorage.removeItem("cartId");
+      fetchCart();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   const handleCheckout = () => {
-    navigate("/checkout") // Navigate to checkout page
-  }
+    if (!cart || cart.items.length === 0) {
+      setError("Your cart is empty");
+      return;
+    }
+    navigate("/checkout");
+  };
 
-  if (loading) return <p className="cart-message">Loading cart...</p>
-  if (error) return <p className="cart-message error">Error: {error}</p>
-  if (!cart || cart.items.length === 0) return <p className="cart-message">Your cart is empty.</p>
+  if (loading) return <p className="cart-message">Loading cart...</p>;
+  if (error) return <p className="cart-message error">Error: {error}</p>;
+  if (!cart || cart.items.length === 0) {
+    return (
+      <div className="cart-page">
+        <h2>Your Cart</h2>
+        <p className="cart-message">Your cart is empty.</p>
+        <Link to="/ProductPage">
+          <button className="back-button">Back to Products</button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="cart-page">
       <h2>Your Cart</h2>
       
-      {/* Green Back Button */}
       <Link to="/ProductPage">
         <button className="back-button">Back to Products</button>
       </Link>
@@ -96,7 +129,10 @@ function CartPage() {
               </td>
               <td>{(item.product.price * item.quantity).toFixed(2)}</td>
               <td>
-                <button className="remove-button" onClick={() => removeItem(item.product.id)}>
+                <button 
+                  className="remove-button" 
+                  onClick={() => removeItem(item.product.id)}
+                >
                   Remove
                 </button>
               </td>
@@ -108,12 +144,20 @@ function CartPage() {
       <div className="cart-summary">
         <p>Total: <strong>Rs. {cart.totalPrice.toFixed(2)}</strong></p>
         <div className="cart-actions">
-          <button className="clear-button" onClick={clearCart}>Clear Cart</button>
-          <button className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</button>
+          <button className="clear-button" onClick={clearCart}>
+            Clear Cart
+          </button>
+          <button 
+            className="checkout-button" 
+            onClick={handleCheckout}
+            disabled={!cart || cart.items.length === 0}
+          >
+            Proceed to Checkout
+          </button>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CartPage
+export default CartPage;

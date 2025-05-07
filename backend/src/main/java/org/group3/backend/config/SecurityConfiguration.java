@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/products","/cart/**")
+                        .requestMatchers("/api/v1/auth/**", "/products","/cart/**", "/orders/**")
                         .permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/admin/**").authenticated()

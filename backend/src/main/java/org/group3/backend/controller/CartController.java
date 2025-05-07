@@ -1,11 +1,10 @@
 package org.group3.backend.controller;
 
 import jakarta.transaction.Transactional;
-import org.group3.backend.model.Cart;
-import org.group3.backend.model.CartItem;
-import org.group3.backend.model.Product;
+import org.group3.backend.model.*;
 import org.group3.backend.repository.CartItemRepository;
 import org.group3.backend.repository.CartRepository;
+import org.group3.backend.repository.OrderRepository;
 import org.group3.backend.repository.ProductRepository;
 import org.group3.backend.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.group3.backend.dto.OrderRequestDTO;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,6 +34,9 @@ public class CartController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     // Get cart by id
     @GetMapping("/{id}")
@@ -123,28 +127,81 @@ public class CartController {
         return ResponseEntity.ok(cartRepository.save(cart));
     }
 
-     // Sending confirmation email
-    @PostMapping("/{cartId}/confirm")
-    public ResponseEntity<?> confirmOrder(@PathVariable Long cartId) {
+    // checkout
+    @PostMapping("/{cartId}/checkout")
+    @Transactional
+    public ResponseEntity<?> checkout(
+            @PathVariable Long cartId,
+            @RequestBody OrderRequestDTO orderRequest) {
+
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
-        String userEmail = "mnaveeth235@gmail.com";
-        StringBuilder emailContent = new StringBuilder("Order Summary:\n");
-        double total = 0;
 
-        for (CartItem item : cart.getItems()) {
-            double subtotal = item.getQuantity() * item.getProduct().getPrice();
-            total += subtotal;
-            emailContent.append(item.getProduct().getName())
-                    .append(" x ").append(item.getQuantity())
-                    .append(" = Rs. ").append(subtotal).append("\n");
+        if (cart.getItems().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty");
         }
 
-        emailContent.append("\nTotal: Rs. ").append(total);
+        // Check stock before proceeding
+        for (CartItem cartItem : cart.getItems()) {
+            Product product = cartItem.getProduct();
+            if (product.getStock_quantity() < cartItem.getQuantity()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Not enough stock for product: " + product.getName());
+            }
+        }
 
-        // Send the email
-        emailService.sendOrderConfirmationEmail(userEmail, emailContent.toString());
+        // Create and save order
+        Order order = new Order();
+        order.setFullName(orderRequest.getFullName());
+        order.setAddress(orderRequest.getAddress());
+        order.setPhone(orderRequest.getPhone());
+        order.setEmail(orderRequest.getEmail());
+        order.setDeliveryMethod(orderRequest.getDeliveryMethod());
+        order.setPaymentMethod(orderRequest.getPaymentMethod());
+        order.setTotalPrice(cart.getTotalPrice());
 
-        return ResponseEntity.ok("Order confirmed and email sent.");
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (CartItem cartItem : cart.getItems()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(cartItem.getProduct());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setSubtotal(cartItem.getSubtotal());
+            orderItems.add(orderItem);
+
+            // Update product stock
+            Product product = cartItem.getProduct();
+            product.setStock_quantity(product.getStock_quantity() - cartItem.getQuantity());
+            productRepository.save(product);
+        }
+
+        order.setItems(orderItems);
+        Order savedOrder = orderRepository.save(order);
+
+        // Clear cart after successful checkout
+        cart.clear();
+        cartRepository.save(cart);
+
+        // Send confirmation email
+        String emailContent = buildOrderConfirmationEmail(savedOrder);
+        emailService.sendOrderConfirmationEmail(savedOrder.getEmail(), emailContent);
+
+        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
+    }
+
+    private String buildOrderConfirmationEmail(Order order) {
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append("Order Summary:\n");
+
+        for (OrderItem item : order.getItems()) {
+            emailContent.append(item.getProduct().getName())
+                    .append(" x ").append(item.getQuantity())
+                    .append(" = Rs. ").append(item.getSubtotal()).append("\n");
+        }
+
+        emailContent.append("\nTotal: Rs. ").append(order.getTotalPrice());
+        emailContent.append("\n\nDelivery Address: ").append(order.getAddress());
+        emailContent.append("\n\nWe'll contact you at ").append(order.getPhone()).append(" for delivery.");
+
+        return emailContent.toString();
     }
 }

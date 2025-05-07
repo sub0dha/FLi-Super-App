@@ -23,8 +23,8 @@ const AdminDashboard = () => {
         <div className="container">
           <h1>Admin Dashboard</h1>
           <div className="admin-actions">
-            <ActionCard title="Add New Product" link="/admin/products/add" />
-            <ActionCard title="View Products" link="/products" />
+            <ActionCard title="Manage orders" link="/orders" />
+            <ActionCard title="Manage Products" link="/products" />
             <ActionCard title="Manage Users" link="/admin/users" />
             <ActionCard title="Admin Profile" link="  /profile" />
           </div>
