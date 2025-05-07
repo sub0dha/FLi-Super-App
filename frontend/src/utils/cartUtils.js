@@ -43,3 +43,4 @@ export async function addToCart(productId, quantity = 1) {
         throw new Error(error.message);
     }
 }
+// commit
