@@ -1,13 +1,10 @@
 import "./ProductsPage.css"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
 import Navbar from "./Navbar"
 import ProductCard from "./ProductCard"
 import {loadCategories} from "../utils/categoryUtils";
 
 function ProductsPage() {
-
-  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([])
 
@@ -44,7 +41,7 @@ function ProductsPage() {
 
   const filteredProducts = products.filter((product) => {
     const matchesCategory = selectedCategory === "All Products" || product.category === selectedCategory
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = product?.name?.toLowerCase().includes(searchQuery.toLowerCase())
     return matchesCategory && matchesSearch
   })
 

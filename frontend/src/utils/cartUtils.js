@@ -16,7 +16,6 @@ export const getOrCreateCartId = async () => {
 }
 
 export async function addToCart(productId, quantity = 1) {
-    try {
         const cartId = await getOrCreateCartId();
 
         const res = await fetch(`http://localhost:8080/cart/${cartId}/items`, {
@@ -38,7 +37,4 @@ export async function addToCart(productId, quantity = 1) {
         window.dispatchEvent(new Event("cartCountUpdated"));
 
         return "Added to cart!";
-    } catch (error) {
-        throw new Error(error.message);
-    }
 }
