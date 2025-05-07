@@ -1,10 +1,13 @@
 package org.group3.backend.controller;
 
-
 import org.group3.backend.dto.ProductDTO;
 import org.group3.backend.model.Product;
 import org.group3.backend.repository.ProductRepository;
+import org.group3.backend.service.ProductService;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,17 +16,37 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductService productService) {
         this.productRepository = productRepository;
+        this.productService = productService;
     }
 
-    @PostMapping("/products/add")
-    Product addProduct(@RequestBody Product product) {
-        return productRepository.save(product);
+    @PostMapping(value = "products/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Product> addProduct(
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("price") double price,
+            @RequestParam("category") String category,
+            @RequestParam("stock_quantity") int stock_quantity,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        ProductDTO newProduct = new ProductDTO(name, description, price, category, stock_quantity);
+        Product savedProduct = productService.createProduct(newProduct, image);
+        return ResponseEntity.ok(productRepository.save(savedProduct));
     }
 
-    @GetMapping("/products")
+
+    @PostMapping("/admin/products/add")
+    ResponseEntity<Product> addProduct(
+            @RequestPart("product") ProductDTO productDTO,
+            @RequestPart(value = "image", required = false) MultipartFile imageFile) {
+        Product savedProduct = productService.createProduct(productDTO, imageFile);
+        return ResponseEntity.ok(savedProduct);
+    }
+
+    @GetMapping({"/products", "/admin/products"})
     List<ProductDTO> getAllProducts() {
         return productRepository.findAll()
                 .stream()
@@ -56,4 +79,11 @@ public class ProductController {
         productRepository.deleteById(id);
         return "Product with id" + id + " deleted";
     }
+
+    @GetMapping({"/products/", "/admin/products/"})
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String query) {
+        List<Product> results = productService.searchProducts(query);
+        return ResponseEntity.ok(results);
+    }
+
 }

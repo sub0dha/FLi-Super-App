@@ -1,20 +1,19 @@
+import "./ProductsPage.css"
 import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 import Navbar from "./Navbar"
 import ProductCard from "./ProductCard"
-import "./ProductsPage.css"
+import {loadCategories} from "../utils/categoryUtils";
 
 function ProductsPage() {
-  const categories = [
-    "All Products",
-    "Fruits & Vegetables",
-    "Meat & Seafood",
-    "Dairy & Eggs",
-    "Bakery",
-    "Frozen Foods",
-    "Beverages",
-    "Snacks",
-    "Household",
-  ]
+
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    loadCategories().then(setCategories);
+  }, []);
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -41,7 +40,6 @@ function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Products")
   const [sortOption, setSortOption] = useState("featured")
   const [currentPage, setCurrentPage] = useState(1)
-  const [searchQuery, setSearchQuery] = useState("")
   const productsPerPage = 8
 
   const filteredProducts = products.filter((product) => {
@@ -130,12 +128,12 @@ function ProductsPage() {
               <h3>Categories</h3>
               <ul className="category-list">
                 {categories.map((category, index) => (
-                    <li key={index}>
+                    <li key={index || category.id}>
                       <button
-                          className={`category-button ${selectedCategory === category ? "active" : ""}`}
-                          onClick={() => handleCategoryChange(category)}
+                          className={`category-button ${selectedCategory === category.name ? "active" : ""}`}
+                          onClick={() => handleCategoryChange(category.name)}
                       >
-                        {category}
+                        {category.name}
                       </button>
                     </li>
                 ))}

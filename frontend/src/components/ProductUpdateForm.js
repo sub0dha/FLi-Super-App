@@ -4,27 +4,27 @@ import { useState, useEffect } from "react"
 import "./ProductUpdateForm.css"
 
 function ProductUpdateForm({ productId, onClose, onUpdate }) {
-  const [product, setProduct] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    stock_quantity: "",
-  })
+  const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   // Fetch the product data when the component mounts
   useEffect(() => {
+    let isMounted = true // Flag to prevent state updates on unmounted component
+
     const fetchProduct = async () => {
       try {
         const response = await fetch(`http://localhost:8080/products/${productId}`)
         if (response.ok) {
           const data = await response.json()
-          setProduct(data)
+          if (isMounted) {
+            setProduct(data)
+            setError(null)
+          }
         } else {
           setError("Failed to fetch product")
         }
+
       } catch (error) {
         setError("Error fetching product: " + error.message)
       } finally {
@@ -72,6 +72,7 @@ function ProductUpdateForm({ productId, onClose, onUpdate }) {
 
   if (loading) return <div className="product-form-loading">Loading...</div>
   if (error) return <div className="product-form-error">{error}</div>
+  if (!product) return null // Prevent rendering form without data
 
   return (
     <div className="product-form">

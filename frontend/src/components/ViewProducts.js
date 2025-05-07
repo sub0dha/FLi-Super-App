@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ViewProducts.css';
-import ProductForm from './ProductForm';
 import ProductUpdateForm from "./ProductUpdateForm";
+import ProductAddForm from "./ProductAddForm";
 
 const ViewProducts = () => {
     const [products, setProducts] = useState([]);
@@ -73,7 +73,7 @@ const ViewProducts = () => {
                 </button>
             </div>
 
-            {showAddForm && <ProductForm onClose={handleCloseForm} />} {/* Conditionally render the ProductForm */}
+            {showAddForm && <ProductAddForm onClose={handleCloseForm} />} {/* Conditionally render the ProductAddForm */}
             <table>
                 <thead>
                 <tr>
@@ -98,7 +98,7 @@ const ViewProducts = () => {
                         <td>
                             <button
                                 className="action-button edit"
-                                onClick={() => handleEdit(product.id)}
+                                onClick={() => handleEdit()}
 
                             >
                                     Edit

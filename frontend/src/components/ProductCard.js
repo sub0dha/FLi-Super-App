@@ -1,44 +1,34 @@
-import { useState } from "react"
-import { getOrCreateCartId } from "../utils/cartUtils"
 import "./ProductCard.css"
+import {useEffect, useState} from "react"
+import {addToCart} from "../utils/cartUtils"
+import {loadCategories} from "../utils/categoryUtils";
 
 function ProductCard({ product }) {
   const [adding, setAdding] = useState(false)
   const [feedback, setFeedback] = useState("")
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    loadCategories().then(setCategories);
+  }, []);
+
+  // New function to find the matching category image
+  const getCategoryImage = (categoryName) => {
+    const category = categories.find(cat => cat.name === categoryName);
+    return category ? category.image : "./all-products.jpg";
+  };
 
   const handleAddToCart = async () => {
-    setAdding(true)
+    setAdding(true);
     try {
-      const cartId = await getOrCreateCartId()
-
-      const res = await fetch(`http://localhost:8080/cart/${cartId}/items`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: product.id,
-          quantity: 1,
-        }),
-      })
-
-      if (!res.ok) {
-        const errorText = await res.text()
-        throw new Error(errorText || "Failed to add to cart")
-      }
-
-      const cartRes = await fetch(`http://localhost:8080/cart/${cartId}`)
-      const cartData = await cartRes.json()
-
-      const newCount = cartData.items.reduce((sum, item) => sum + item.quantity, 0)
-      localStorage.setItem("cartCount", newCount)
-      window.dispatchEvent(new Event("cartCountUpdated"))
-
-      setFeedback("Added to cart!")
+      const message = await addToCart(product.id, 1);
+      setFeedback(message);
     } catch (error) {
-      setFeedback("Error: " + error.message)
+      setFeedback("Error: " + error.message);
     }
-    setAdding(false)
-    setTimeout(() => setFeedback(""), 2000)
-  }
+    setAdding(false);
+    setTimeout(() => setFeedback(""), 2000);
+  };
 
   const renderStarRating = (rating) => {
     const fullStars = Math.floor(rating)
@@ -65,7 +55,8 @@ function ProductCard({ product }) {
         </div>
 
         <div className="product-image">
-          <img src={product.image || "./veges.jpg"} alt={product.name} />
+          {/* Updated image source to use the mapped category image */}
+          <img src={getCategoryImage(product.category)} alt={product.name} />
           <div className="product-actions">
             <button className="action-button wishlist-button" title="Add to Wishlist">❤️</button>
             <button className="action-button view-button" title="Quick View">👁️</button>

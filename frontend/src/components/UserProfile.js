@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./UserProfile.css";
 
 const UserProfile = () => {
@@ -18,6 +19,13 @@ const UserProfile = () => {
   useEffect(() => {
     fetchUserProfile();
   }, []);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwtToken"); // Clear your auth token
+    navigate("/login"); // Redirect to login page
+  };
 
   const fetchUserProfile = async () => {
     const token = localStorage.getItem("jwtToken");
@@ -214,6 +222,11 @@ const UserProfile = () => {
             </div>
           )}
         </div>
+      </div>
+      <div>
+        <button className="logout-button" onClick={handleLogout}>
+          Log Out
+        </button>
       </div>
     </div>
   );

@@ -25,9 +25,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(withDefaults())
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/products","/cart/**", "/orders/**")
+                        .requestMatchers("/api/v1/auth/**",
+                                "/products","/products/**",
+                                "/cart/**",
+                                "/categories", "/categories/**", "/orders/**")
                         .permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/admin/**").authenticated()
