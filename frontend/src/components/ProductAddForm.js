@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './ProductAddForm.css'; // Import the CSS
 
-function ProductAddForm({ onClose }) {
+function ProductAddForm({ onClose, onAdd }) {
     const [product, setProduct] = useState({
         name: '',
         description: '',
@@ -39,9 +39,9 @@ const handleSubmit = async (e) => {
   const formData = new FormData();
   formData.append("name", product.name);
   formData.append("description", product.description);
-  formData.append("price", parseFloat(product.price));
+  formData.append("price", product.price);
   formData.append("category", product.category);
-  formData.append("stock_quantity", parseInt(product.stock_quantity));
+  formData.append("stock_quantity", product.stock_quantity);
 
   if (imageFile) {
     formData.append("image", imageFile);
@@ -54,12 +54,12 @@ const handleSubmit = async (e) => {
     });
 
     if (response.ok) {
-      console.log('Product added successfully!');
-      setProduct({ name: '', description: '', price: '', category: '', stock_quantity: '' });
-      setImageFile(null);
-      if (onClose) {
-        onClose();
-      }
+        const savedProduct = await response.json();
+        console.log('Product added successfully!');
+        setProduct({ name: '', description: '', price: '', category: '', stock_quantity: '' });
+        setImageFile(null);
+        if (onClose) onClose();
+        if (onAdd) onAdd(savedProduct);
     } else {
       console.error('Failed to add product');
     }

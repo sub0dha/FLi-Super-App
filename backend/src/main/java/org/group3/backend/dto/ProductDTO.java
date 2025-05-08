@@ -1,5 +1,8 @@
 package org.group3.backend.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import org.group3.backend.model.Product;
@@ -8,11 +11,13 @@ import org.group3.backend.model.Product;
 @Setter
 public class ProductDTO {
     private Long id;
-    private String name;
+   @NotBlank
+   private String name;
     private String description;
+    @Positive
     private double price;
-    private String category;
-    private double stock_quantity;
+    @NotBlank private String category;
+    @Min(0) private double stock_quantity;
     private boolean inStock;
 
     public ProductDTO(Product product) {
@@ -25,6 +30,11 @@ public class ProductDTO {
         this.inStock = product.getStock_quantity() > 0;
     }
 
-    public ProductDTO(String name, String description, double price, String category, int stockQuantity) {
+    public ProductDTO(String name, String description, double price, String category, int stock_quantity) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.stock_quantity = stock_quantity;
     }
 }

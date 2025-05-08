@@ -6,7 +6,9 @@ import ProductAddForm from "./ProductAddForm";
 const ViewProducts = () => {
     const [products, setProducts] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [showProductUpdateForm, setShowProductUpdateForm] = useState(false);
+    const [editingProductId, setEditingProductId] = useState(null);
 
     // Fetch products from the backend
     useEffect(() => {
@@ -19,6 +21,17 @@ const ViewProducts = () => {
                 console.error('There was an error fetching the products!', error);
             });
     }, []);
+
+    const filteredProducts = products.filter(product => {
+        const query = searchQuery.toLowerCase();
+        return (
+            (product.name && product.name.toLowerCase().includes(query)) ||
+            (product.category && product.category.toLowerCase().includes(query)) ||
+            (product.description && product.description.toLowerCase().includes(query))
+        );
+    });
+
+
 
     // delete product
     const handleDelete = (id) => {
@@ -41,13 +54,8 @@ const ViewProducts = () => {
 
     // edit product
     const handleEdit = (id) => {
-        // alert(`Edit product with ID: ${id}`);
+        setEditingProductId(id);
         setShowProductUpdateForm(!showProductUpdateForm);
-        // You can implement a modal or redirect logic here
-    };
-
-    const handleCloseUpdateForm = () => {
-        setShowProductUpdateForm(false);
     };
 
     // add product
@@ -66,14 +74,38 @@ const ViewProducts = () => {
             <h1>Available Products</h1>
             <div className="top-bar">
                 <div className="search-bar">
-                    <input type="text" placeholder="Search..." />
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+
                 </div>
                 <button className="add-product-button" onClick={handleAddProduct}>
                     Add Product
                 </button>
             </div>
 
-            {showAddForm && <ProductAddForm onClose={handleCloseForm} />} {/* Conditionally render the ProductAddForm */}
+            {showAddForm && <ProductAddForm onClose={handleCloseForm} onAdd={(newProduct) => {
+                // Add the new product to the existing list
+                setProducts([...products, newProduct]);
+            }}
+            />} {/* Conditionally render the ProductAddForm */}
+            {showProductUpdateForm && editingProductId && (
+                <ProductUpdateForm
+                    productId={editingProductId}
+                    onClose={() => {
+                        setShowProductUpdateForm(false);
+                        setEditingProductId(null);
+                    }}
+                    onUpdate={(updatedProduct) => {
+                        setProducts(products.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+                        setShowProductUpdateForm(false);
+                        setEditingProductId(null);
+                    }}
+                />
+            )}
             <table>
                 <thead>
                 <tr>
@@ -87,7 +119,7 @@ const ViewProducts = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {products.map(product => (
+                {filteredProducts.map(product => (
                     <tr key={product.id}>
                         <td>{product.id}</td>
                         <td>{product.name}</td>
@@ -98,12 +130,11 @@ const ViewProducts = () => {
                         <td>
                             <button
                                 className="action-button edit"
-                                onClick={() => handleEdit()}
+                                onClick={() => handleEdit(product.id)}
 
                             >
                                     Edit
                             </button>
-                            {showProductUpdateForm && <ProductUpdateForm onClose={handleCloseUpdateForm} />}
                             <button
                                 className="action-button delete"
                                 onClick={() => handleDelete(product.id)}

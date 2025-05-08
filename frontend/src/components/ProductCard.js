@@ -13,10 +13,13 @@ function ProductCard({ product }) {
   }, []);
 
   // New function to find the matching category image
+
   const getCategoryImage = (categoryName) => {
     const category = categories.find(cat => cat.name === categoryName);
     return category ? category.image : "./all-products.jpg";
   };
+
+  const productImageSrc = product.imagePath ? product.imagePath : getCategoryImage(product.category);
 
   const handleAddToCart = async () => {
     setAdding(true);
@@ -56,7 +59,7 @@ function ProductCard({ product }) {
 
         <div className="product-image">
           {/* Updated image source to use the mapped category image */}
-          <img src={getCategoryImage(product.category)} alt={product.name} />
+          <img src={productImageSrc} alt={product.name} />
           <div className="product-actions">
             <button className="action-button wishlist-button" title="Add to Wishlist">❤️</button>
             <button className="action-button view-button" title="Quick View">👁️</button>

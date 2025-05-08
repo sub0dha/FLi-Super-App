@@ -33,23 +33,32 @@ public class ProductService {
     }
 
     public Product createProduct(ProductDTO productDTO, MultipartFile imageFile) {
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setCategory(productDTO.getCategory());
-        product.setStock_quantity(productDTO.getStock_quantity());
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imagePath = storeImage(imageFile);
-            product.setImagePath(imagePath);
-        }
+        Product product = new Product();
+        updateProductFromDTO(product, productDTO);
+
+        handleImageUpdate(product, imageFile);
 
         return productRepository.save(product);
     }
 
     public List<Product> searchProducts(String query) {
         return productRepository.searchProducts(query);
+    }
+
+    private void updateProductFromDTO(Product product, ProductDTO dto) {
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setCategory(dto.getCategory());
+        product.setStock_quantity(dto.getStock_quantity());
+    }
+
+    private void handleImageUpdate(Product product, MultipartFile imageFile) {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imagePath = storeImage(imageFile);
+            product.setImagePath(imagePath);
+        }
     }
 
     private String storeImage(MultipartFile file) {
@@ -66,4 +75,16 @@ public class ProductService {
             throw new RuntimeException("Failed to store file", e);
         }
     }
+
+    public Product updateProduct(Long id, ProductDTO updateDTO, MultipartFile image) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
+
+        updateProductFromDTO(existingProduct, updateDTO);
+
+        handleImageUpdate(existingProduct, image);
+
+        return productRepository.save(existingProduct);
+    }
+
 }
