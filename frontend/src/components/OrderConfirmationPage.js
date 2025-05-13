@@ -35,8 +35,16 @@ function OrderConfirmationPage() {
             </li>
           ))}
         </ul>
-        <p><strong>Total:</strong> Rs. {orderDetails.totalPrice.toFixed(2)}</p>
+
+        <p><strong>Subtotal:</strong> Rs. {orderDetails.totalPrice.toFixed(2)}</p>
+
+        {orderDetails.discount > 0 && (
+          <p><strong>Discount ({orderDetails.discount * 100}%):</strong> - Rs. {(orderDetails.totalPrice * orderDetails.discount).toFixed(2)}</p>
+        )}
+
+        <p><strong>Total to Pay:</strong> Rs. {orderDetails.finalPrice ? parseFloat(orderDetails.finalPrice).toFixed(2) : orderDetails.totalPrice.toFixed(2)}</p>
       </div>
+
 
       <div className="delivery-details">
         <h3>Delivery Details</h3>

@@ -11,6 +11,7 @@ import Login from "./components/Login";
 import CheckoutPage from './components/CheckoutPage.js';
 import OrderConfirmationPage from './components/OrderConfirmationPage.js';
 import AdminOrders from './components/AdminOrders.js';
+import PromotionsPage from './components/PromotionsPage.js';
 
 const App = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
@@ -48,6 +49,7 @@ const App = () => {
           <Route path="/orderconfirmation" element={<OrderConfirmationPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/orders" element={<AdminOrders />} />
+          <Route path="/promotions" element={<PromotionsPage />} />
           {/* Redirect to login if no match */}
 
         </Routes>

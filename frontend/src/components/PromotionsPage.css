@@ -1,0 +1,74 @@
+.promotions-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .promotion-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .promotion-card {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .promotion-card h2 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .promotion-card p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .promotion-date {
+    margin-top: 10px;
+    font-style: italic;
+    color: #888;
+  }
+  
+  button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #218838;
+  }
+  
+  .loading,
+  .error {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #555;
+  }
+
+  .offer-banner {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px; /* Sets a max limit */
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  
+  
