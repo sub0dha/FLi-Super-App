@@ -2,7 +2,6 @@ package org.group3.backend.controller;
 
 import jakarta.transaction.Transactional;
 import org.group3.backend.model.*;
-import org.group3.backend.repository.CartItemRepository;
 import org.group3.backend.repository.CartRepository;
 import org.group3.backend.repository.OrderRepository;
 import org.group3.backend.repository.ProductRepository;
@@ -23,14 +22,14 @@ import java.util.Optional;
 @RequestMapping("/cart")
 public class CartController {
 
-    @Autowired
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
-    @Autowired
-    private CartItemRepository cartItemRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    public CartController(CartRepository cartRepository, ProductRepository productRepository) {
+        this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
+    }
 
     @Autowired
     private EmailService emailService;
@@ -42,11 +41,7 @@ public class CartController {
     @GetMapping("/{id}")
     public ResponseEntity<Cart> getCart(@PathVariable Long id) {
         Optional<Cart> cart = cartRepository.findById(id);
-        if (cart.isPresent()) {
-            return ResponseEntity.ok(cart.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cart.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Create a new cart

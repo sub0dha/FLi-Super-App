@@ -1,4 +1,4 @@
-package org.group3.backend.corsconfig;
+package org.group3.backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

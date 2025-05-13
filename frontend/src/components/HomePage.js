@@ -1,8 +1,13 @@
-import Navbar from "./Navbar.js"
 import "./HomePage.css"
+import Navbar from "./Navbar.js"
+import {useEffect, useState} from "react";
+import {addToCart} from "../utils/cartUtils";
+import {loadCategories} from "../utils/categoryUtils";
 
 function HomePage() {
   // Featured products data
+  const [adding, setAdding] = useState(false)
+  const [feedback, setFeedback] = useState("");
   const featuredProducts = [
     {
       id: 1,
@@ -20,17 +25,23 @@ function HomePage() {
     { id: 4, name: "Gourmet Meat Cuts", price: "Rs. 800", image: "./meat.jpg" },
   ]
 
-  // Categories data
-  const categories = [
-    { name: "Fruits & Vegetables", image: "./veges.jpg" },
-    { name: "Meat & Seafood", image: "./meat.jpg" },
-    { name: "Dairy & Eggs", image: "./egg.jpg" },
-    { name: "Bakery", image: "./bakery.jpg" },
-    { name: "Frozen Foods", image: "./frozen.jpg" },
-    { name: "Beverages", image: "./bev.jpg" },
-    { name: "Snacks", image: "./snacks.jpg" },
-    { name: "Household", image: "./household.jpg" },
-  ]
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    loadCategories().then(setCategories);
+  }, []);
+
+  const handleAddToCart = async () => {
+    setAdding(true);
+    try {
+      const message = await addToCart(featuredProducts.id, 1);
+      setFeedback(message);
+    } catch (error) {
+      setFeedback("Error: " + error.message);
+    }
+    setAdding(false);
+    setTimeout(() => setFeedback(""), 2000);
+  };
 
   return (
     <div className="home-page">
@@ -98,7 +109,12 @@ function HomePage() {
                   <div className="product-info">
                     <h3 className="product-name">{product.name}</h3>
                     <p className="product-price">{product.price}</p>
-                    <button className="btn btn-add-cart">Add to Cart</button>
+                    <button className="btn btn-add-cart"
+                            disabled={!product.inStock || adding}
+                            onClick={handleAddToCart}
+                    >
+                        {adding ? "Adding..." : product.inStock ? "Add to Cart" : "Out of Stock"}
+                        </button>
                   </div>
                 </div>
               ))}
@@ -178,7 +194,7 @@ function HomePage() {
               </a>
               <p>Your one-stop shop for fresh groceries and household essentials at competitive prices.</p>
               <div className="social-links">
-                <a href="#" className="social-link">
+                <a href="https://www.facebook.com/FLiSuper/" className="social-link">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -191,38 +207,6 @@ function HomePage() {
                     strokeLinejoin="round"
                   >
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                  </svg>
-                </a>
-                <a href="#" className="social-link">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                  </svg>
-                </a>
-                <a href="#" className="social-link">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                   </svg>
                 </a>
               </div>
@@ -245,6 +229,12 @@ function HomePage() {
                 </li>
                 <li>
                   <a href="/careers">Careers</a>
+                </li>
+                <li>
+                  <a href="/login">Login</a>
+                </li>
+                <li>
+                  <a href="/register">Register</a>
                 </li>
               </ul>
             </div>

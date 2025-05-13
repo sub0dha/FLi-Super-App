@@ -50,3 +50,9 @@
 .product-form .cancel-button:hover {
     background-color: #c82333;
 }
+
+.preview-img {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}

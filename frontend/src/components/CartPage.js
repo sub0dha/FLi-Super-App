@@ -11,11 +11,11 @@ function CartPage() {
 
   const fetchCart = async () => {
     try {
-      const cartId = await getOrCreateCartId();
-      const res = await fetch(`http://localhost:8080/cart/${cartId}`);
-      if (!res.ok) throw new Error("Failed to fetch cart");
-      const data = await res.json();
-      setCart(data);
+      const cartId = await getOrCreateCartId()
+      const response = await fetch(`http://localhost:8080/cart/${cartId}`)
+      if (!response.ok) throw new Error("Failed to fetch cart")
+      const data = await response.json()
+      setCart(data)
     } catch (err) {
       setError(err.message);
     } finally {
@@ -29,7 +29,7 @@ function CartPage() {
 
   const updateQuantity = async (productId, quantity) => {
     if (quantity < 1) return;
-    
+
     try {
       const cartId = localStorage.getItem("cartId");
       const res = await fetch(`http://localhost:8080/cart/${cartId}/items/${productId}`, {
@@ -37,7 +37,7 @@ function CartPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity }),
       });
-      
+
       if (!res.ok) throw new Error("Failed to update quantity");
       fetchCart();
     } catch (err) {
@@ -51,7 +51,7 @@ function CartPage() {
       const res = await fetch(`http://localhost:8080/cart/${cartId}/items/${productId}`, {
         method: "DELETE",
       });
-      
+
       if (!res.ok) throw new Error("Failed to remove item");
       fetchCart();
     } catch (err) {
@@ -65,7 +65,7 @@ function CartPage() {
       const res = await fetch(`http://localhost:8080/cart/${cartId}`, {
         method: "DELETE",
       });
-      
+
       if (!res.ok) throw new Error("Failed to clear cart");
       localStorage.removeItem("cartId");
       fetchCart();
@@ -100,6 +100,7 @@ function CartPage() {
     <div className="cart-page">
       <h2>Your Cart</h2>
       
+      {/* Green Back Button */}
       <Link to="/ProductPage">
         <button className="back-button">Back to Products</button>
       </Link>
@@ -129,8 +130,8 @@ function CartPage() {
               </td>
               <td>{(item.product.price * item.quantity).toFixed(2)}</td>
               <td>
-                <button 
-                  className="remove-button" 
+                <button
+                  className="remove-button"
                   onClick={() => removeItem(item.product.id)}
                 >
                   Remove
@@ -147,8 +148,8 @@ function CartPage() {
           <button className="clear-button" onClick={clearCart}>
             Clear Cart
           </button>
-          <button 
-            className="checkout-button" 
+          <button
+            className="checkout-button"
             onClick={handleCheckout}
             disabled={!cart || cart.items.length === 0}
           >

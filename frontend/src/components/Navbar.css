@@ -35,6 +35,9 @@
 /* Desktop Navigation */
 .nav-desktop {
   display: none;
+  border-radius: 15px;
+  white-space: nowrap;
+  margin: 0 10px;
 }
 
 @media (min-width: 768px) {
@@ -49,10 +52,12 @@
 }
 
 .nav-link {
-  padding: 0 15px;
+  padding: 0 10px;
+  margin: 0 10px;
   color: #555;
   font-weight: 500;
   transition: color 0.3s;
+
 }
 
 .nav-link:hover {
@@ -217,11 +222,12 @@
 
 .cart-count-badge {
   position: absolute;
-  top: -20px;
-  right: -10px;
+  top: -15px;
+  right: -14px;
   background-color: red;
   color: white;
   font-size: 12px;
   border-radius: 50%;
-  padding: 2px 6px;
+  min-width: 18px;
+  max-height: 18px;
 }

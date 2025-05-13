@@ -4,64 +4,84 @@ import { useState, useEffect } from "react"
 import "./ProductUpdateForm.css"
 
 function ProductUpdateForm({ productId, onClose, onUpdate }) {
-  const [product, setProduct] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    stock_quantity: "",
-  })
+  const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [categories, setCategories] = useState([])
+  const [imageFile, setImageFile] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
 
   // Fetch the product data when the component mounts
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/products/${productId}`)
-        if (response.ok) {
-          const data = await response.json()
-          setProduct(data)
-        } else {
-          setError("Failed to fetch product")
-        }
-      } catch (error) {
-        setError("Error fetching product: " + error.message)
-      } finally {
-        setLoading(false)
-      }
+    let isMounted = true // Flag to prevent state updates on unmounted component
+
+    if (!productId) {
+      setLoading(false);
+      return;
     }
 
-    if (productId) {
-      fetchProduct()
-    } else {
-      setLoading(false)
-    }
+    // Fetch categories
+    fetch("http://localhost:8080/categories")
+      .then(res => res.json())
+      .then(data => isMounted && setCategories(data))
+      .catch(err => isMounted && console.error("Failed to load categories", err))
+
+    // Fetch product data
+    fetch(`http://localhost:8080/products/${productId}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch product')
+        return response.json()
+      })
+      .then(data => {
+        if (isMounted) {
+          setProduct(data)
+          setImagePreview(data.imagePath || null)
+          setError(null)
+        }
+      })
+      .catch(error => {
+        if (isMounted) setError("Error fetching product: " + error.message)
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false)
+      })
+
+    return () => isMounted = false
   }, [productId])
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value })
   }
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      const formData = new FormData()
+      formData.append("name", product.name)
+      formData.append("description", product.description)
+      formData.append("price", product.price)
+      formData.append("category", product.category)
+      formData.append("stock_quantity", product.stock_quantity)
+
+      if (imageFile) {
+        formData.append("image", imageFile)
+      }
+
       const response = await fetch(`http://localhost:8080/products/${productId}`, {
-        method: "PUT", // or 'PATCH' depending on your API
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product),
+        method: "PUT",
+        body: formData
       })
 
       if (response.ok) {
-        console.log("Product updated successfully!")
-        if (onUpdate) {
-          onUpdate(product) // Notify parent component about the update
-        }
-        if (onClose) {
-          onClose()
-        }
+        const updatedProduct = await response.json()
+        if (onUpdate) onUpdate(updatedProduct)
+        if (onClose) onClose()
       } else {
         setError("Failed to update product")
       }
@@ -72,6 +92,7 @@ function ProductUpdateForm({ productId, onClose, onUpdate }) {
 
   if (loading) return <div className="product-form-loading">Loading...</div>
   if (error) return <div className="product-form-error">{error}</div>
+  if (!product) return null // Prevent rendering form without data
 
   return (
     <div className="product-form">
@@ -94,13 +115,36 @@ function ProductUpdateForm({ productId, onClose, onUpdate }) {
         <br />
         <label>
           Category:
-          <input type="text" name="category" value={product.category} onChange={handleChange} />
+          <select name="category" value={product.category} onChange={handleChange}>
+            <option value="" disabled>Select category</option>
+            {categories.map(cat => (
+                <option key={cat.id} value={cat.name}
+                        disabled={cat.name === "All Products"}>
+                  {cat.name}
+                </option>
+            ))}
+          </select>
         </label>
         <br />
         <label>
           Stock Quantity:
           <input type="number" name="stock_quantity" value={product.stock_quantity} onChange={handleChange} />
         </label>
+        <label>
+          Update Image:
+          <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+          />
+        </label>
+        {imagePreview && (
+            <img
+                className="preview-img"
+                src={imagePreview}
+                alt="Product preview"
+            />
+        )}
         <br />
         <button type="submit">Update Product</button>
         <br />
