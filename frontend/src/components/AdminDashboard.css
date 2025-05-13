@@ -19,6 +19,7 @@ header {
 }
 
 .logo {
+    padding-top: 50px;
     font-size: 2rem;
     font-weight: bold;
 }
@@ -85,7 +86,7 @@ h1 {
 
 .action-card h2 {
     margin-bottom: 1rem;
-    color: #22c55e;
+    color: #000000;
 }
 
 .action-card a {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './RegistrationPage.css';
-import Logo from '../assets/logo.png';
+import Logo from '../assets/Logo.png';
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
