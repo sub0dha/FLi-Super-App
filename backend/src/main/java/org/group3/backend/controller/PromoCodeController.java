@@ -16,10 +16,61 @@ public class PromoCodeController {
     @Autowired
     private PromoCodeRepository promoCodeRepository;
 
+    // Get all promo codes (admin)
+    @GetMapping
+    public List<PromoCode> getAllPromoCodes() {
+        return promoCodeRepository.findAll();
+    }
+
     // Get all active promo codes (for display)
     @GetMapping("/active")
     public List<PromoCode> getActivePromoCodes() {
         return promoCodeRepository.findAllByActiveTrue();
+    }
+
+    // Get single promo code by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<PromoCode> getPromoCodeById(@PathVariable Long id) {
+        return promoCodeRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Create new promo code
+    @PostMapping
+    public PromoCode createPromoCode(@RequestBody PromoCode promoCode) {
+        return promoCodeRepository.save(promoCode);
+    }
+
+    // Update existing promo code
+    @PutMapping("/{id}")
+    public ResponseEntity<PromoCode> updatePromoCode(
+            @PathVariable Long id,
+            @RequestBody PromoCode promoCodeDetails) {
+        return promoCodeRepository.findById(id)
+                .map(promo -> {
+                    promo.setCode(promoCodeDetails.getCode());
+                    promo.setTitle(promoCodeDetails.getTitle());
+                    promo.setDescription(promoCodeDetails.getDescription());
+                    promo.setDiscountPercentage(promoCodeDetails.getDiscountPercentage());
+                    promo.setStartDate(promoCodeDetails.getStartDate());
+                    promo.setEndDate(promoCodeDetails.getEndDate());
+                    promo.setActive(promoCodeDetails.isActive());
+                    PromoCode updatedPromo = promoCodeRepository.save(promo);
+                    return ResponseEntity.ok(updatedPromo);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Delete promo code
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePromoCode(@PathVariable Long id) {
+        return promoCodeRepository.findById(id)
+                .map(promo -> {
+                    promoCodeRepository.delete(promo);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // Validate a promo code
@@ -37,5 +88,4 @@ public class PromoCodeController {
 
         return ResponseEntity.badRequest().body("Invalid or expired promo code.");
     }
-
 }
