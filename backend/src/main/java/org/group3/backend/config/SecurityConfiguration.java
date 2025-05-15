@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/auth/**",
                                 "/products","/products/**",
                                 "/cart/**",
-                                "/categories", "/categories/**", "/orders/**")
+                                "/categories", "/categories/**", "/orders/**", "/promocodes/**")
                         .permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/admin/**").authenticated()

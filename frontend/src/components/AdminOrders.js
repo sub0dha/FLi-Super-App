@@ -42,7 +42,7 @@ const AdminOrders = () => {
         <p><strong>Name:</strong> {order.fullName}</p>
         <p><strong>Address:</strong> {order.address}</p>
         <p><strong>Status:</strong> {order.status}</p>
-        <p><strong>Total:</strong> ${order.totalPrice}</p>
+        <p><strong>Total:</strong> Rs.{order.totalPrice}</p>
         <button
           onClick={() => setSelectedOrder(order)}
           className="admin-button view-button"
@@ -77,7 +77,7 @@ const AdminOrders = () => {
           <p><strong>Address:</strong> {selectedOrder.address}</p>
           <p><strong>Delivery:</strong> {selectedOrder.deliveryMethod}</p>
           <p><strong>Payment:</strong> {selectedOrder.paymentMethod}</p>
-          <p><strong>Total:</strong> ${selectedOrder.totalPrice}</p>
+          <p><strong>Total:</strong> Rs.{selectedOrder.totalPrice}</p>
           <div>
             <h4>Items:</h4>
             <ul>
