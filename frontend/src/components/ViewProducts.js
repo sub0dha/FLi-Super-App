@@ -128,19 +128,20 @@ const ViewProducts = () => {
                         <td>{product.description}</td>
                         <td>{product.stock_quantity}</td>
                         <td>
+                        <div className="action-buttons">
                             <button
-                                className="action-button edit"
-                                onClick={() => handleEdit(product.id)}
-
+                            className="action-button edit"
+                            onClick={() => handleEdit(product.id)}
                             >
-                                    Edit
+                            Edit
                             </button>
                             <button
-                                className="action-button delete"
-                                onClick={() => handleDelete(product.id)}
+                            className="action-button delete"
+                            onClick={() => handleDelete(product.id)}
                             >
-                                Delete
+                            Delete
                             </button>
+                        </div>
                         </td>
                     </tr>
                 ))}
