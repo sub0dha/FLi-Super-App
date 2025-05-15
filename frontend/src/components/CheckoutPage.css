@@ -113,15 +113,76 @@
   .item-price {
     font-weight: 600;
   }
-  
-  .order-total {
+    /* Promo Code Section */
+  .promo-code-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+  }
+
+  .promo-code-input {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .promo-code-input input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 1rem;
+  }
+
+  .apply-promo-button {
+    padding: 0 1.5rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .apply-promo-button:hover {
+    background-color: #556b2f;
+  }
+
+  .apply-promo-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  /* Price Summary */
+  .price-summary {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+  }
+
+  .price-row {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
-    background-color: rgba(46, 139, 87, 0.1);
-    border-radius: var(--radius);
-    font-weight: 700;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  .price-row.discount {
+    color: var(--success-color);
+    font-weight: 600;
+  }
+
+  .price-row.total {
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
     font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-dark);
   }
   
   /* Delivery Methods */
