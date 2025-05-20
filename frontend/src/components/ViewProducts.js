@@ -6,7 +6,7 @@ import ProductAddForm from "./ProductAddForm";
 const ViewProducts = () => {
     const [products, setProducts] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(""); // State for search query
+    const [searchQuery, setSearchQuery] = useState("");
     const [showProductUpdateForm, setShowProductUpdateForm] = useState(false);
     const [editingProductId, setEditingProductId] = useState(null);
 
@@ -42,9 +42,9 @@ const ViewProducts = () => {
                 if (response.ok) {
                     // Remove the deleted product from the state
                     setProducts(products.filter(product => product.id !== id));
-                    alert('Product deleted successfully!');
+                    alert('Product made unavailable.');
                 } else {
-                    alert('Failed to delete product.');
+                    alert('Product made unavailable.');
                 }
             })
             .catch(error => {
@@ -139,7 +139,7 @@ const ViewProducts = () => {
                             className="action-button delete"
                             onClick={() => handleDelete(product.id)}
                             >
-                            Delete
+                            Make Unavailable
                             </button>
                         </div>
                         </td>
