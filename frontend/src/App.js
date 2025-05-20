@@ -14,6 +14,7 @@ import AdminOrders from './components/AdminOrders.js';
 import PromotionsPage from './components/PromotionsPage.js';
 import ViewPromoCodes from './components/ViewPromoCodes.js';
 import PromoCodeForm from './components/PromoCodeForm.js';
+import AdminRegistration from './components/AdminRegistration.js';
 
 const App = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
@@ -40,8 +41,10 @@ const App = () => {
           /> */}
 
           {/* Open access routes */}
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/admin/register" element={<AdminRegistration />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/products" element={<ViewProducts />} />
           <Route path="/productPage" element={<ProductsPage />} />

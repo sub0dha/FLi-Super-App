@@ -113,6 +113,43 @@
   color: #2E7D32;
 }
 
+.admin-registration {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.admin-registration a {
+  color: #388E3C;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.admin-registration a:hover {
+  text-decoration: underline;
+  color: #2E7D32;
+}
+
+.user-registration {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.user-registration a {
+  color: #388E3C;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.user-registration a:hover {
+  text-decoration: underline;
+  color: #2E7D32;
+}
+
+
 .fli-logo {
   width: auto;
   max-width: 360px;

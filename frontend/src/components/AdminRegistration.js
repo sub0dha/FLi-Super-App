@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './RegistrationPage.css';
 import Logo from '../assets/Logo.png';
 
-function RegistrationPage() {
+function AdminRegistration() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -65,7 +65,7 @@ function RegistrationPage() {
       <div className="registration-form">
         <img src={Logo} alt="Logo" className="fli-logo" />
         <h2 className="welcome-message" >Welcome to Fli Super</h2>
-        <h2 className="registration-title">User Registration</h2>
+        <h2 className="registration-title">Admin Registration</h2>
         <form onSubmit={handleSubmit} autoComplete="off">
           <div className="form-group">
             <label htmlFor="firstName">First Name</label>
@@ -131,8 +131,8 @@ function RegistrationPage() {
           {success && <p style={{ color: 'green' }}>{success}</p>}
 
           {/* Admin Registration */}
-          <p className="admin-registration">
-            Register as an Admin <Link to="/admin/register">Register Here</Link>
+          <p className="user-registration">
+            Register as a User <Link to="/register">Register Here</Link>
           </p>
 
           {/* Link to login page if user already has an account */}
@@ -145,4 +145,4 @@ function RegistrationPage() {
   );
 }
 
-export default RegistrationPage;
+export default AdminRegistration;
