@@ -56,7 +56,7 @@ function HomePage() {
                 <h1>Fresh Food, Delivered to Your Doorstep</h1>
                 <p>Shop quality groceries at affordable prices with our convenient online supermarket.</p>
                 <div className="hero-buttons">
-                  <a href="/products" className="btn btn-primary">
+                  <a href="/productpage" className="btn btn-primary">
                     Shop Now
                   </a>
                   <a href="/offers" className="btn btn-outline">
