@@ -1,7 +1,7 @@
 import "./HomePage.css"
 import Navbar from "./Navbar.js"
 import {useEffect, useState} from "react";
-import {addToCart} from "../utils/cartUtils";
+import {addToCart} from "../utils/cartUtils.js";
 import {loadCategories} from "../utils/categoryUtils";
 
 function HomePage() {
