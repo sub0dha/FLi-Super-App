@@ -86,6 +86,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+    justify-content: center;
   }
 
   .hero-image {
@@ -95,11 +96,14 @@
   }
 
   .hero-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  }
+  width: 100%;
+  max-width: none; /* Allow it to scale beyond container limits */
+  height: auto;
+  border-radius: 0; /* Remove rounded corners */
+  box-shadow: none; /* Remove shadow */
+  display: block;
+}
+
 
   /* Buttons */
   .btn {

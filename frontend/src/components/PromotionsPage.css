@@ -70,5 +70,23 @@
     margin-bottom: 20px;
   }
   
-  
-  
+  .promotion-images {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: flex-start;
+  gap: 10px; /* Space between images */
+  flex-wrap: wrap; /* Stack on small screens */
+}
+
+.offer-banner {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.promo-instruction {
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 8px;
+}

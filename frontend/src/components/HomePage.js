@@ -59,13 +59,13 @@ function HomePage() {
                   <a href="/productpage" className="btn btn-primary">
                     Shop Now
                   </a>
-                  <a href="/offers" className="btn btn-outline">
+                  <a href="/promotions" className="btn btn-outline">
                     View Offers
                   </a>
                 </div>
               </div>
               <div className="hero-image">
-                <img src="./fresh.jpg" alt="Fresh groceries" style={{ width: "50%", maxWidth: "300px", height: "auto" }} />
+                <img src="./Logo.png" alt="Fresh groceries" />
               </div>
 
             </div>
@@ -81,7 +81,7 @@ function HomePage() {
             </div>
             <div className="categories-grid">
               {categories.map((category, index) => (
-                <a href={`/category/${index + 1}`} className="category-card" key={index}>
+                <a href={`/ProductPage`} className="category-card" key={index}>
                   <div className="category-icon">
                     <img src={category.image} alt={category.name} />
                   </div>
@@ -140,12 +140,12 @@ function HomePage() {
                   <span className="offer-badge">WEEKEND SPECIAL</span>
                   <h3 className="offer-title">20% OFF Fresh Fruits</h3>
                   <p className="offer-description">Get a discount on all fresh fruits this weekend only!</p>
-                  <a href="/offers/fruits" className="btn btn-light">
-                    Shop Now
+                  <a href="/promotions" className="btn btn-light">
+                    View Offers
                   </a>
                 </div>
                 <div className="offer-image">
-                  <img src="./offer.jpg" alt="Weekend special offer" />
+                  <img src="./veges.jpg" alt="Weekend special offer" />
                 </div>
               </div>
 
@@ -154,12 +154,12 @@ function HomePage() {
                   <span className="offer-badge">MEMBERS ONLY</span>
                   <h3 className="offer-title">Buy 2 Get 1 Free</h3>
                   <p className="offer-description">Exclusive offer for FLI SUPER members on selected items!</p>
-                  <a href="/membership" className="btn btn-light">
-                    Join Now
+                  <a href="/promotions" className="btn btn-light">
+                    View Offers
                   </a>
                 </div>
                 <div className="offer-image">
-                  <img src="./member.jpg" alt="Membership offer" />
+                  <img src="./Offer-main.jpg" alt="Membership offer" />
                 </div>
               </div>
             </div>

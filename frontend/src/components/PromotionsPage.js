@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PromotionsPage.css";
+import Navbar from "./Navbar";
 
 function PromotionsPage() {
   const navigate = useNavigate();
@@ -31,13 +32,15 @@ function PromotionsPage() {
 
   return (
     <div className="promotions-page">
+      <Navbar />
       <h1>Exclusive Offers and Promotions</h1>
-      <img
-        src="/Offer-1.jpg"
-        alt="Special Offer Banner"
-        className="offer-banner"
-      />
-
+      <div class="promotion-images">
+        <img src="./Offer-1.jpg" alt="Promo 1" class="offer-banner" />
+        <img src="./Offer-2.jpg" alt="Promo 2" class="offer-banner" />
+        <img src="./Offer-3.jpg" alt="Promo 2" class="offer-banner" />        
+      </div>
+      
+      <h1>Special Promo codes</h1>
       <div className="promotion-list">
         {promotions.length > 0 ? (
           promotions.map((promo) => (
@@ -48,12 +51,11 @@ function PromotionsPage() {
                 Valid from {new Date(promo.startDate).toLocaleDateString()} to{" "}
                 {new Date(promo.endDate).toLocaleDateString()}
               </p>
-
-              {/* Displaying the promo code */}
               <div className="promo-code-box">
                 <strong>Promo Code:</strong> {promo.code}
               </div>
-
+              <p className="promo-instruction">Copy and paste the code at the checkout.</p>
+              
               <button onClick={() => navigate("/productpage")}>Shop Now</button>
             </div>
           ))

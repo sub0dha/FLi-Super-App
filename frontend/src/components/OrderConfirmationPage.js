@@ -91,7 +91,7 @@ function OrderConfirmationPage() {
         </div>
       </div>
 
-      <button className="home-button" onClick={() => navigate("/")}>
+      <button className="home-button" onClick={() => navigate("/home")}>
         Return to Home
       </button>
     </div>

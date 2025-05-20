@@ -20,8 +20,12 @@ public class Cart {
 
     private double totalPrice;
 
+    @Column(nullable = false)
+    private double discountedTotalPrice = 0.0;
+
     public Cart() {
         this.totalPrice = 0.0;
+        this.discountedTotalPrice = 0.0;
     }
 
     public void addItem(CartItem item) {
