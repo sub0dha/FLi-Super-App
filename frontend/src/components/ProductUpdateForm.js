@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import "./ProductUpdateForm.css"
+import {uploadImageToGCS} from "../utils/imageUploadUtils";
 
 function ProductUpdateForm({ productId, onClose, onUpdate }) {
   const [product, setProduct] = useState(null)
@@ -59,19 +60,25 @@ function ProductUpdateForm({ productId, onClose, onUpdate }) {
     setImagePreview(URL.createObjectURL(file))
   }
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      let imageUrl = product.image_url;
+      if (imageFile) {
+        imageUrl = await uploadImageToGCS(imageFile);
+      }
+
       const formData = new FormData()
       formData.append("name", product.name)
       formData.append("description", product.description)
       formData.append("price", product.price)
       formData.append("category", product.category)
+
       formData.append("stock_quantity", product.stock_quantity)
 
-      if (imageFile) {
-        formData.append("image", imageFile)
-      }
+      formData.append("imageUrl", imageUrl)
 
       const response = await fetch(`http://localhost:8080/products/${productId}`, {
         method: "PUT",

@@ -1,5 +1,6 @@
 package org.group3.backend.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -18,6 +19,7 @@ public class ProductDTO {
     private double price;
     @NotBlank private String category;
     @Min(0) private double stock_quantity;
+    private String imageUrl;
     private boolean inStock;
 
     public ProductDTO(Product product) {
@@ -36,5 +38,15 @@ public class ProductDTO {
         this.price = price;
         this.category = category;
         this.stock_quantity = stock_quantity;
+    }
+
+    public ProductDTO(@Valid String name, String description, @Valid double price, @Valid String category, @Valid int stockQuantity, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.stock_quantity = stock_quantity;
+        this.imageUrl = imageUrl;
+
     }
 }

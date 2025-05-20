@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css'; 
-import Logo from '../assets/Logo.png';
+import Logo from '../assets/logo.png';
 import {Link, useNavigate} from "react-router-dom";
 
 
@@ -45,12 +45,13 @@ const Login = () => {
         localStorage.setItem('jwtToken', data.token);
         localStorage.setItem('userRole', data.role);
         localStorage.setItem('userEmail', email);
+        window.dispatchEvent(new Event('userRoleChanged'));
         setSuccess(true);
         setError('');
 
         setTimeout(() => {
           if (data.role === 'ADMIN') {
-            navigate('/admin/Dashboard');
+            navigate('/admin/dashboard');
           } else if (data.role === 'USER') {
             navigate('/home');
           } else {

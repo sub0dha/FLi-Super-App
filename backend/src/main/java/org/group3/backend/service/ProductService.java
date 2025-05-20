@@ -32,16 +32,6 @@ public class ProductService {
         }
     }
 
-    public Product createProduct(ProductDTO productDTO, MultipartFile imageFile) {
-
-        Product product = new Product();
-        updateProductFromDTO(product, productDTO);
-
-        handleImageUpdate(product, imageFile);
-
-        return productRepository.save(product);
-    }
-
     public List<Product> searchProducts(String query) {
         return productRepository.searchProducts(query);
     }
@@ -54,12 +44,6 @@ public class ProductService {
         product.setStock_quantity(dto.getStock_quantity());
     }
 
-    private void handleImageUpdate(Product product, MultipartFile imageFile) {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imagePath = storeImage(imageFile);
-            product.setImagePath(imagePath);
-        }
-    }
 
     private String storeImage(MultipartFile file) {
         try {
@@ -76,15 +60,20 @@ public class ProductService {
         }
     }
 
-    public Product updateProduct(Long id, ProductDTO updateDTO, MultipartFile image) {
+    public Product createProduct(ProductDTO productDTO) {
+
+        Product product = new Product();
+        updateProductFromDTO(product, productDTO);
+
+        return productRepository.save(product);
+    }
+
+    public Product updateProduct(Long id, ProductDTO updateDTO) {
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
 
         updateProductFromDTO(existingProduct, updateDTO);
 
-        handleImageUpdate(existingProduct, image);
-
         return productRepository.save(existingProduct);
     }
-
 }

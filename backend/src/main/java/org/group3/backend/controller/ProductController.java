@@ -24,30 +24,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping(value = "products/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Product> addProduct(
-            @Valid @RequestParam(value = "name") String name,
-            @RequestParam(value = "description") String description,
-            @Valid @RequestParam(value = "price") double price,
-            @Valid @RequestParam(value = "category") String category,
-            @Valid @RequestParam(value = "stock_quantity") int stock_quantity,
-            @RequestParam(value = "image", required = false) MultipartFile image
-    ) {
-        ProductDTO newProduct = new ProductDTO(name, description, price, category, stock_quantity);
-        Product savedProduct = productService.createProduct(newProduct, image);
-        return ResponseEntity.ok(savedProduct);
-    }
-
-
-//    @PostMapping("/admin/products/add")
-//    ResponseEntity<Product> addProduct(
-//            @RequestPart("product") ProductDTO productDTO,
-//            @RequestPart(value = "image", required = false) MultipartFile imageFile) {
-//        Product savedProduct = productService.createProduct(productDTO, imageFile);
-//        return ResponseEntity.ok(savedProduct);
-//    }
-
-    @GetMapping({"/products", "/admin/products"})
+    @GetMapping("/products")
     List<ProductDTO> getAllProducts() {
         return productRepository.findAll()
                 .stream()
@@ -55,7 +32,22 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @PutMapping(value = "/products/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/admin/products/add")
+    public ResponseEntity<Product> addProduct(
+            @Valid @RequestParam(value = "name") String name,
+            @RequestParam(value = "description") String description,
+            @Valid @RequestParam(value = "price") double price,
+            @Valid @RequestParam(value = "category") String category,
+            @Valid @RequestParam(value = "stock_quantity") int stock_quantity,
+            @RequestParam(value = "imageUrl", required = false) String imageUrl
+    ) {
+        ProductDTO newProduct = new ProductDTO(name, description, price, category, stock_quantity, imageUrl);
+        Product savedProduct = productService.createProduct(newProduct);
+        return ResponseEntity.ok(savedProduct);
+    }
+
+
+    @PutMapping(value = "/admin/products/{id}")
     public ResponseEntity<Product> updateProductWithImage(
             @PathVariable Long id,
             @RequestParam("name") String name,
@@ -63,15 +55,15 @@ public class ProductController {
             @RequestParam("price") double price,
             @RequestParam("category") String category,
             @RequestParam("stock_quantity") int stock_quantity,
-            @RequestParam(value = "image", required = false) MultipartFile image
+            @RequestParam(value = "imageUrl", required = false) String imageUrl
     ) {
-        ProductDTO updateDTO = new ProductDTO(name, description, price, category, stock_quantity);
-        Product updatedProduct = productService.updateProduct(id, updateDTO, image);
+        ProductDTO updateDTO = new ProductDTO(name, description, price, category, stock_quantity, imageUrl);
+        Product updatedProduct = productService.updateProduct(id, updateDTO);
         return ResponseEntity.ok(updatedProduct);
     }
 
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/admin/products/{id}")
     String deleteProduct(@PathVariable Long id) {
         if (!productRepository.existsById(id)) {
             return "Product not found with id " + id;
@@ -86,12 +78,10 @@ public class ProductController {
         return ResponseEntity.ok(results);
     }
     
-    @GetMapping("/products/{id}")
+    @GetMapping("admin/products/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         return productRepository.findById(id)
                 .map(product -> ResponseEntity.ok(new ProductDTO(product)))
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
 }

@@ -21,7 +21,7 @@ const AdminOrders = () => {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await fetch(`http://localhost:8080/orders/${orderId}`, {
+      await fetch(`http://localhost:8080/admin/orders/${orderId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

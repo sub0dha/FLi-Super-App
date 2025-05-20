@@ -147,7 +147,7 @@ function CheckoutPage() {
       alert("Order placed successfully! Confirmation email sent.");
 
       // Navigate to confirmation page
-      navigate("/orderconfirmation");
+      navigate("/order/confirmation");
     } catch (err) {
       setError("Checkout failed: " + err.message);
     }

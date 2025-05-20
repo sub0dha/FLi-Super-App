@@ -19,7 +19,7 @@ function ProductCard({ product }) {
     return category ? category.image : "./all-products.jpg";
   };
 
-  const productImageSrc = product.imagePath ? product.imagePath : getCategoryImage(product.category);
+  const productImageSrc = product.image_path ? product.image_path : getCategoryImage(product.category);
 
   const handleAddToCart = async () => {
     setAdding(true);

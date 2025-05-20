@@ -22,8 +22,13 @@ const App = () => {
     const updateRole = () => {
       setUserRole(localStorage.getItem('userRole'));
     };
+    window.addEventListener('userRoleChanged', updateRole); // listen for custom event
     window.addEventListener('storage', updateRole);
-    return () => window.removeEventListener('storage', updateRole);
+    return () => {
+      window.removeEventListener('storage', updateRole);
+      window.removeEventListener('userRoleChanged', updateRole);
+    };
+
   }, []);
 
   return (
@@ -34,10 +39,11 @@ const App = () => {
               path="/"
               element={userRole === 'USER' ? <HomePage /> : <Navigate to="/login" />}
           />
-          {/* <Route
-              path="/admin/Dashboard"
+
+           <Route
+              path="/"
               element={userRole === 'ADMIN' ? <AdminDashboard /> : <Navigate to="/login" />}
-          /> */}
+          />
 
           {/* Open access routes */}
           <Route path="/login" element={<Login />} />
@@ -56,6 +62,14 @@ const App = () => {
           <Route path="/promocodeform" element={<PromoCodeForm />} />
           {/* Redirect to login if no match */}
 
+          {/* Admin specific routes */}
+          <Route
+              path="/admin/dashboard"
+              element={userRole === 'ADMIN' ? <AdminDashboard /> : <Navigate to="/login" />}
+          />
+          <Route path="/admin/products"
+                 element={userRole === 'ADMIN' ? <ViewProducts /> : <Navigate to="/login" />}
+          />
         </Routes>
       </Router>
   );

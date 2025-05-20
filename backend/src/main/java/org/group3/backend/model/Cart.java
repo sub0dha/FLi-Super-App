@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class Cart {
     public void addItem(CartItem item) {
         // Check if product already exists in cart
         for (CartItem existingItem : this.items) {
-            if (existingItem.getProduct().getId() == item.getProduct().getId()) {
+            if (Objects.equals(existingItem.getProduct().getId(), item.getProduct().getId())) {
                 existingItem.setQuantity(existingItem.getQuantity() + item.getQuantity());
                 recalculateTotalPrice();
                 return;
@@ -41,7 +42,7 @@ public class Cart {
 
     public void updateItemQuantity(Long productId, int quantity) {
         for (CartItem item : this.items) {
-            if (item.getProduct().getId() == productId) {
+            if (Objects.equals(item.getProduct().getId(), productId)) {
                 item.setQuantity(quantity);
                 recalculateTotalPrice();
                 return;
@@ -50,7 +51,7 @@ public class Cart {
     }
 
     public void removeItem(Long productId) {
-        this.items.removeIf(item -> item.getProduct().getId() == productId);
+        this.items.removeIf(item -> Objects.equals(item.getProduct().getId(), productId));
         recalculateTotalPrice();
     }
 

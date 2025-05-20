@@ -1,2 +1,4 @@
 Makefile
 /spring-cloud-gcp/
+node_modules/
+repomix-output.txt

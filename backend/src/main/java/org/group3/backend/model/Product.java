@@ -8,6 +8,7 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +19,5 @@ public class Product {
     private String category;
     private double stock_quantity;
     @Column(length = 2048) // For longer file paths
-    private String imagePath;
-
-    public Product(String name, String description, double price, String category, int stockQuantity) {
-    }
+    private String imageUrl;
 }

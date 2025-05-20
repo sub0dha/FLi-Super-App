@@ -147,13 +147,19 @@
   }
   
   .category-button:hover {
-    color: #2ecc71;
+    color: #ffffff;
+    text-align: inherit;
   }
   
   .category-button.active {
     color: #2ecc71;
     font-weight: 600;
   }
+
+.category-button.active:hover {
+  color: #ffffff;
+  font-weight: 600;
+}
   
   /* Products Container */
   .products-container {

@@ -2,7 +2,6 @@ package org.group3.backend.controller;
 
 import org.group3.backend.model.Order;
 import org.group3.backend.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +12,32 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("")
+@RequestMapping()
 public class OrderController {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    @GetMapping("/orders/{orderId}")
+    public OrderController(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<?> getAllOrders() {
+        var orders = orderRepository.findAll().stream().map(order -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", order.getId());
+            map.put("fullName", order.getFullName());
+            map.put("address", order.getAddress());
+            map.put("email", order.getEmail());
+            map.put("status", order.getStatus()); // assuming you have a status field
+            map.put("totalPrice", order.getTotalPrice());
+            return map;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/admin/orders/{orderId}")
     public ResponseEntity<?> getOrderDetails(@PathVariable Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
@@ -44,22 +62,8 @@ public class OrderController {
 
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/orders")
-    public ResponseEntity<?> getAllOrders() {
-        var orders = orderRepository.findAll().stream().map(order -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", order.getId());
-            map.put("fullName", order.getFullName());
-            map.put("address", order.getAddress());
-            map.put("email", order.getEmail());
-            map.put("status", order.getStatus()); // assuming you have a status field
-            map.put("totalPrice", order.getTotalPrice());
-            return map;
-        }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(orders);
-    }
-    @PutMapping("/orders/{orderId}")
+    @PutMapping("/admin/orders/{orderId}")
     public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId, @RequestBody Map<String, String> body) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));

@@ -22,7 +22,6 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final AdminEmailRepository adminEmailRepository;
 
-
     public AuthenticationResponse register(RegisterRequest request) {
         Role assignedRole = adminEmailRepository.existsByEmail(request.getEmail())
                 ? Role.ADMIN
