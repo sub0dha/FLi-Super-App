@@ -7,6 +7,9 @@ function CheckoutPage() {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [promoCode, setPromoCode] = useState("");
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [discountedTotal, setDiscountedTotal] = useState(0);
 
   const [deliveryDetails, setDeliveryDetails] = useState({
     fullName: "",
@@ -37,6 +40,7 @@ function CheckoutPage() {
         if (!res.ok) throw new Error("Failed to fetch cart");
         const data = await res.json();
         setCart(data);
+        setDiscountedTotal(data.totalPrice);
       } catch (err) {
         setError(err.message);
         navigate("/cart");
@@ -58,14 +62,24 @@ function CheckoutPage() {
     setCardDetails((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handlePromoCodeApply = () => {
+    if (promoCode.trim() && cart) {
+      const discount = cart.totalPrice * 0.1;
+      const newTotal = cart.totalPrice - discount;
+      setDiscountedTotal(newTotal);
+      setDiscountApplied(true);
+      alert(`10% discount applied! New total: Rs. ${newTotal.toFixed(2)}`);
+    }
+  };
+
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
-  
+
     if (!cart || cart.items.length === 0) {
       setError("Your cart is empty");
       return;
     }
-  
+
     const cartId = localStorage.getItem("cartId");
     const orderData = {
       fullName: deliveryDetails.fullName,
@@ -83,7 +97,11 @@ function CheckoutPage() {
         quantity: item.quantity,
         subtotal: item.product.price * item.quantity
       })),
-      totalPrice: cart.totalPrice,
+      totalPrice: discountApplied ? discountedTotal : cart.totalPrice,
+      originalPrice: cart.totalPrice,
+      discountApplied: discountApplied,
+      discountAmount: discountApplied ? (cart.totalPrice * 0.1) : 0,
+      promoCode: discountApplied ? promoCode : null,
       ...(paymentMethod === "card" && {
         cardNumber: cardDetails.cardNumber,
         cardName: cardDetails.cardName,
@@ -91,7 +109,7 @@ function CheckoutPage() {
         cvv: cardDetails.cvv
       })
     };
-  
+
     try {
       // Process checkout
       const response = await fetch(`http://localhost:8080/cart/${cartId}/checkout`, {
@@ -101,37 +119,39 @@ function CheckoutPage() {
         },
         body: JSON.stringify(orderData),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Checkout failed");
       }
-  
+
       const order = await response.json();
-  
+
       // Trigger email confirmation
       await fetch(`http://localhost:8080/cart/${cartId}/confirm`, {
         method: "POST",
       });
-  
+
       // Save order details to localStorage before navigating
       localStorage.setItem("orderDetails", JSON.stringify({
         ...order,
         deliveryMethod,
         paymentMethod,
         items: cart.items,
-        totalPrice: cart.totalPrice
+        totalPrice: discountApplied ? discountedTotal : cart.totalPrice,
+        originalPrice: cart.totalPrice,
+        discountApplied,
+        discountAmount: discountApplied ? (cart.totalPrice * 0.1) : 0
       }));
-  
+
       alert("Order placed successfully! Confirmation email sent.");
-  
+
       // Navigate to confirmation page
       navigate("/orderconfirmation");
     } catch (err) {
       setError("Checkout failed: " + err.message);
     }
   };
-  
 
   if (loading) return <div className="checkout-loading">Loading checkout...</div>;
   if (error) return <div className="checkout-error">{error}</div>;
@@ -203,9 +223,49 @@ function CheckoutPage() {
               </div>
             ))}
           </div>
-          <div className="order-total">
-            <span>Total:</span>
-            <span>Rs. {cart.totalPrice.toFixed(2)}</span>
+          
+          {/* Promo Code Section */}
+          <div className="promo-code-section">
+            <div className="form-group">
+              <label>Promo Code</label>
+              <div className="promo-code-input">
+                <input
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  placeholder="Enter promo code"
+                  disabled={discountApplied}
+                />
+                <button
+                  type="button"
+                  className="apply-promo-button"
+                  onClick={handlePromoCodeApply}
+                  disabled={!promoCode.trim() || discountApplied}
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Price Summary */}
+          <div className="price-summary">
+            {discountApplied && (
+              <>
+                <div className="price-row">
+                  <span>Subtotal:</span>
+                  <span>Rs. {cart.totalPrice.toFixed(2)}</span>
+                </div>
+                <div className="price-row discount">
+                  <span>Discount (10%):</span>
+                  <span>- Rs. {(cart.totalPrice * 0.1).toFixed(2)}</span>
+                </div>
+              </>
+            )}
+            <div className="price-row total">
+              <span>Total:</span>
+              <span>Rs. {(discountApplied ? discountedTotal : cart.totalPrice).toFixed(2)}</span>
+            </div>
           </div>
         </section>
 
