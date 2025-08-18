@@ -1,70 +1,141 @@
-# FLI Super - The Supermarket Web App
+🛒 FLI Super - The Supermarket Web Application
 
-Welcome to FLI Super, the ultimate supermarket web application designed to enhance your grocery shopping experience. This app allows users to browse products, add items to their cart, and make purchases seamlessly.
+Welcome to FLI Super, a modern and feature-rich supermarket web application designed to provide users with a seamless grocery shopping experience. From browsing products to making secure payments, FLI Super delivers a complete e-commerce solution for supermarkets.
 
-## Features
+✨ Features
 
-- **Product Browsing**: View a wide range of products across various categories.
-- **Shopping Cart**: Add items to your shopping cart and manage quantities.
-- **Checkout**: Secure and fast checkout process.
-- **User Accounts**: Create and manage user accounts for a personalized experience.
-- **Order History**: Track your past orders and re-order items with ease.
-- **Search Functionality**: Quickly find products using the search bar.
+🔎 Product Browsing – Explore a wide range of products across multiple categories.
 
-## Technologies Used
+🛒 Shopping Cart – Add products, update quantities, and remove items before checkout.
 
-- **Frontend**: React.js, HTML5, CSS3, JavaScript
-- **Backend**: Java, Spring Boot
-- **Database**: MySQL
-- **Authentication**: Spring Security
-- **Payment Gateway**: Stripe
-- **Deployment**: Docker
+💳 Secure Checkout – Smooth checkout with integrated payment gateway (Stripe).
 
-## Installation
+👤 User Accounts & Profiles – Create and manage accounts for a personalized shopping experience.
 
-To run this project locally, follow these steps:
+📦 Order Management – View order history, track purchases, and re-order items.
 
-1. **Clone the Repository**:
-    ```bash
-    git clone https://github.com/SLIIT-FacultyOfComputing/se-group-project-group-3-fli-super-supermarket-app.git
-    cd se-group-project-group-3-fli-super-supermarket-app
-    ```
+🔐 JWT Authentication – Secure login and registration with Spring Security & JWT (JSON Web Tokens).
 
-2. **Install Dependencies**:
-    ```bash
-    npm install
-    ```
+🎟️ Discounts & Promo Codes – Apply discount coupons during checkout for reduced prices.
 
-4. **Start the Application**:
-    ```bash
-    npm start
-    ```
+🔍 Search & Filter – Quickly find products with advanced search and category filters.
 
-The application should now be running at `http://localhost:3000`.
+📊 Admin Dashboard – Manage products, categories, orders, users, and discounts.
 
-## Usage
+📱 Responsive UI – Optimized for desktop and mobile devices.
 
-- **Homepage**: Browse through the featured products and categories.
-- **Product Page**: View details of a specific product.
-- **Cart**: Add products to your cart and manage quantities.
-- **Checkout**: Complete your purchase and make payments securely.
-- **User Account**: Sign up or log in to access your account and order history.
+🏗️ Technologies Used
 
-## Contributing
+Frontend
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature-name`).
-3. Commit your changes (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature/your-feature-name`).
-5. Open a pull request.
+React.js
 
-## License
+HTML5, CSS3, JavaScript (ES6+)
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Axios (API communication)
 
----
+Backend
 
-Thank you for choosing FLI Super for your supermarket needs!
+Java, Spring Boot
 
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/PNXcjgcR)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=18535457)
+Spring Security + JWT Authentication
+
+RESTful APIs
+
+Database
+
+MySQL (Relational Database)
+
+JPA / Hibernate ORM
+
+Authentication & Authorization
+
+JWT-based Authentication
+
+Role-based Access Control (User & Admin roles)
+
+Payments & Discounts
+
+Stripe Payment Gateway Integration
+
+Discount & Promo Code Engine
+
+Deployment
+
+Docker & Docker Compose
+
+(Optional: Kubernetes / AWS / GCP for cloud deployment)
+
+🚀 Installation
+1️⃣ Clone the Repository
+git clone https://github.com/SLIIT-FacultyOfComputing/se-group-project-group-3-fli-super-supermarket-app.git
+cd se-group-project-group-3-fli-super-supermarket-app
+
+2️⃣ Backend Setup (Spring Boot)
+cd backend
+mvn clean install
+mvn spring-boot:run
+
+
+Backend will run at: http://localhost:8080
+
+3️⃣ Frontend Setup (React)
+cd frontend
+npm install
+npm start
+
+
+Frontend will run at: http://localhost:3000
+
+🔐 Authentication (JWT Flow)
+
+Register/Login → User provides email & password.
+
+Token Generation → On successful login, backend generates a JWT token.
+
+Secure API Calls → Token is included in headers (Authorization: Bearer <token>) for protected routes.
+
+Role-based Access – Admin has elevated privileges (manage products, orders, discounts).
+
+🛍️ Usage
+
+Homepage – Browse featured categories & products.
+
+Product Page – View detailed information, stock, and reviews.
+
+Cart – Add/remove items, apply discounts, and view total.
+
+Checkout – Enter details & pay securely using Stripe.
+
+User Dashboard – Manage profile, view order history, track status.
+
+Admin Panel – Add/update/delete products, view orders, manage users & discounts.
+
+🤝 Contributing
+
+We welcome contributions!
+
+Fork the repository
+
+Create a feature branch
+
+git checkout -b feature/your-feature-name
+
+
+Commit your changes
+
+git commit -m "Added a new feature"
+
+
+Push to your branch
+
+git push origin feature/your-feature-name
+
+
+Open a Pull Request
+
+📜 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+✅ With FLI Super, grocery shopping is faster, easier, and smarter.
