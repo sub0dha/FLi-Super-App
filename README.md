@@ -1,7 +1,3 @@
-Here’s a more polished and **professional README.md** for your **FLI Super - The Supermarket Web App**, including JWT authentication, discounts, and other important details you’d expect in a modern supermarket web app:
-
----
-
 # 🛒 FLI Super - The Supermarket Web Application
 
 Welcome to **FLI Super**, a modern and feature-rich supermarket web application designed to provide users with a seamless grocery shopping experience. From browsing products to making secure payments, FLI Super delivers a complete e-commerce solution for supermarkets.
