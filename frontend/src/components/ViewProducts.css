@@ -1,0 +1,260 @@
+/* Enhanced ViewProducts.css - keeping original structure */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #495057;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Top bar styling */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 25px auto;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.search-bar {
+    position: relative;
+    width: auto;
+}
+
+.search-bar input {
+    padding: 12px 15px 12px 40px;
+    width: 300px;
+    border: 1px solid #e0e0e0;
+    border-radius: 50px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.search-bar input:focus {
+    border-color: #4dabf7;
+    box-shadow: 0 3px 8px rgba(77, 171, 247, 0.2);
+    outline: none;
+}
+
+.search-bar::before {
+    content: "🔍";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.5;
+}
+
+.add-product-button {
+    padding: 12px 24px;
+    background-color: #22c55e;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+}
+
+.add-product-button::before {
+    content: "+";
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.add-product-button:hover {
+    background-color: #22c55e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(67, 97, 238, 0.25);
+}
+
+/* Table styling */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead tr {
+    background-color: #22c55e;
+    color: #fff;
+    text-align: left;
+    font-weight: 500;
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9ecef;
+}
+
+th {
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 14px;
+}
+
+tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #e9ecef;
+}
+
+tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.002);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+tbody tr:last-of-type {
+    border-bottom: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-button {
+    padding: 8px 16px;;
+    margin: 0;
+    border: none;
+    border-radius: 50px; 
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.action-button.edit {
+    background-color: #e9f3ff;
+    color: #4361ee;
+}
+
+.action-button.edit:hover {
+    background-color: #2e82ff;
+    color: #fff;
+}
+
+.action-button.delete {
+    background-color: #fff2f2;
+    color: #e74c3c;
+}
+
+.action-button.delete:hover {
+    background-color: #f92727;
+    color: #fff;
+}
+
+
+/* Category styling */
+td:nth-child(4) {
+    position: relative;
+}
+
+td:nth-child(4)::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: #4dabf7;
+}
+
+/* Price styling */
+td:nth-child(3)::before {
+    content: "$";
+    opacity: 0.7;
+    margin-right: 2px;
+}
+
+/* Stock quantity styling */
+td:nth-child(6) {
+    position: relative;
+}
+
+td:nth-child(6)::after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 8px;
+    background-color: #06d6a0;
+}
+
+/* Form styling (maintains original structure) */
+/* Assuming ProductAddForm has its own styling,
+   but adding some basic overlay styling here */
+.product-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 80vh;       /* Limit max height to 80% of viewport height */
+    overflow: auto;         /* Show scrollbars only if content overflows */
+    scrollbar-width: none;   /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.product-form::-webkit-scrollbar {
+    display: none;           /* Chrome, Safari, Opera */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .search-bar input {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 12px 10px;
+    }
+
+    .action-button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
